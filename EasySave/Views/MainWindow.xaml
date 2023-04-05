@@ -9,13 +9,13 @@
     <TabControl>
         <TabItem Header="Create Jobs">
             <Grid>
-                <Label Content="Jobs creation" HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="18" FontWeight="Bold"/>
-                
-                
-                <StackPanel Margin="40,80,500,0">
+                <Label Content="Jobs creation" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold"/>
+
+
+                <StackPanel Margin="40,80,500,0" Grid.ColumnSpan="3">
                     <Label Content="Name" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30"></Label>
                     <TextBox x:Name="textBoxJobName" Margin="10,0,0,5" VerticalAlignment="Center"/>
-                    
+
                     <Label Content="Source" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30"></Label>
                     <DockPanel Margin="10,0,0,5" VerticalAlignment="Center">
                         <TextBox x:Name="textBoxJobSource" IsReadOnly="True" DockPanel.Dock="Left" Width="200" Margin="0,0,3,0"/>
@@ -38,7 +38,7 @@
                 </StackPanel>
 
 
-                <DataGrid Name="dgLstFile" AutoGenerateColumns="False" Grid.Row="0" Margin="0,100,30,50" HorizontalAlignment="Right" Width="400">
+                <DataGrid Name="dgLstFile1" AutoGenerateColumns="False" Grid.Row="0" Margin="0,100,30,50" HorizontalAlignment="Right" Width="400" Grid.Column="2">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding JobName}"/>
                         <DataGridTextColumn Header="Source" Binding="{Binding PathSource}"/>
@@ -50,16 +50,72 @@
 
             </Grid>
         </TabItem>
+        
+        
         <TabItem Header="Execute Jobs">
-            <!-- Contenu de la deuxième page -->
+            <Grid>
+                <Label Content="Execute Jobs" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold"/>
+
+                <DataGrid Name="dgLstFile2" AutoGenerateColumns="False" Grid.Row="0" Margin="0,80,0,200" HorizontalAlignment="Center" Width="700">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding JobName}"/>
+                        <DataGridTextColumn Header="Source" Binding="{Binding PathSource}"/>
+                        <DataGridTextColumn Header="Target" Binding="{Binding PathTarget}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DockPanel VerticalAlignment="Center" Margin="0,150,500,0" Width="200" Height="25">
+                    <Label Content="name :"  DockPanel.Dock="Left"/>
+                    <TextBox x:Name="textBoxJobExecute" DockPanel.Dock="Right"/>
+                </DockPanel>
+
+                <Button Content="Execute" Click="btnExecuteJob" Width="50" Height="30" Margin="0,250,500,0"/>
+
+                
+                <Border BorderBrush="Black" BorderThickness="1" Width="400" Height="150" Margin="270,210,0,0">
+                    <ScrollViewer>
+                        <StackPanel x:Name="stackPanel">
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+
+
+            </Grid>
         </TabItem>
+        
+        
         <TabItem Header="Delete Jobs">
-            <Label Content="Delete Jobs" HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="18" FontWeight="Bold"/>
+            <Grid>
+                <Label Content="Delete Jobs" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold"/>
 
+                <DockPanel VerticalAlignment="Center" Margin="0,0,450,0" Width="200" Height="25">
+                    <Label Content="name :"  DockPanel.Dock="Left"/>
+                    <TextBox x:Name="textBoxJobDelete" DockPanel.Dock="Right"/>
+                </DockPanel>
 
+                <Button Content="Delete" Click="btnDeleteJob" Width="50" Height="30" Margin="0,200,450,0"/>
+                
+                
+                <DataGrid Name="dgLstFile3" AutoGenerateColumns="False" Grid.Row="0" Margin="0,100,30,50" HorizontalAlignment="Right" Width="400">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding JobName}"/>
+                        <DataGridTextColumn Header="Source" Binding="{Binding PathSource}"/>
+                        <DataGridTextColumn Header="Target" Binding="{Binding PathTarget}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                
+            </Grid>
         </TabItem>
+        
+        
         <TabItem Header="Settings">
-            <!-- Contenu de la troisième page -->
+
         </TabItem>
+        
     </TabControl>
 </Window>

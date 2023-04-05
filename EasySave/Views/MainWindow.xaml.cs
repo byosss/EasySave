@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static EasySave.Models.Jobs;
 
 namespace EasySave
 {
@@ -43,6 +44,35 @@ namespace EasySave
             updateGrid();
         }
 
+        void btnDeleteJob(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel viewModel = new MainWindowViewModel()
+            {
+                JobName = textBoxJobDelete.Text,
+            };
+
+            viewModel.deleteBackup();
+
+            updateGrid();
+        }
+
+        void btnExecuteJob(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel viewModel = new MainWindowViewModel()
+            {
+                JobName = textBoxJobExecute.Text
+            };
+
+            bool error = viewModel.executeBackup();
+
+            if (!error) 
+            {
+                (string jobName, int filePassed, int totalFiles) = viewModel.getThreadInfo(textBoxJobExecute.Text);
+
+                addExecutedJob(jobName, filePassed, totalFiles);
+            }
+        }
+
         void updateGrid()
         {
             List<MainWindowViewModel> list = new List<MainWindowViewModel>();
@@ -63,8 +93,50 @@ namespace EasySave
                 });
             }
 
-            dgLstFile.ItemsSource = list;
+            dgLstFile1.ItemsSource = list;
+            dgLstFile2.ItemsSource = list;
 
+        }
+
+        void addExecutedJob(string jobName, int filePassed, int totalFiles) 
+        {
+            // Créez le Border
+            Border border = new Border();
+            border.BorderBrush = Brushes.Black;
+            border.BorderThickness = new Thickness(1);
+            border.Height = 50;
+            border.VerticalAlignment = VerticalAlignment.Top;
+
+            // Créez le Grid
+            Grid grid = new Grid();
+
+            // Créez les Labels
+            Label label1 = new Label();
+            label1.Content = "name : " + jobName;
+            label1.HorizontalAlignment = HorizontalAlignment.Left;
+            label1.VerticalAlignment = VerticalAlignment.Center;
+
+            Label label2 = new Label();
+            label2.Content = filePassed + "/" + totalFiles + " files";
+            label2.HorizontalAlignment = HorizontalAlignment.Center;
+            label2.VerticalAlignment = VerticalAlignment.Center;
+
+            // Créez le Button
+            Button button = new Button();
+            button.Content = "Pause";
+            button.HorizontalAlignment = HorizontalAlignment.Right;
+            button.Margin = new Thickness(7);
+
+            // Ajoutez les contrôles au Grid
+            grid.Children.Add(label1);
+            grid.Children.Add(label2);
+            grid.Children.Add(button);
+
+            // Ajoutez le Grid au Border
+            border.Child = grid;
+
+            // Ajoutez le Border au StackPanel
+            stackPanel.Children.Add(border);
         }
 
         private void BrowseSource_Click(object sender, RoutedEventArgs e)

@@ -6,11 +6,15 @@ using System.Xml;
 using System.Windows;
 using EasySave.ViewModels;
 using System.Xml.Linq;
+using System.Drawing;
+using System.Windows.Shapes;
+using System.Threading;
 
 namespace EasySave.Models
 {
     internal class Jobs
     {
+        public static List<Dictionary<string, Thread>> executedThread = new List<Dictionary<string, Thread>>();
 
         static public void createJob(string JobName, string PathSource, string PathTarget, string Type)
         {
@@ -63,18 +67,51 @@ namespace EasySave.Models
             addJobToXml(jb);
         }
 
-        static public void deleteJobFromXML(job jbIn)
+        static public void deleteJob(job job)
         {
-            string path = @"..\..\..\file\jobs.xml";
+            deleteJobFromXML(job);
+        }
+
+        static public void executeJob(job job)
+        {
+            //MessageBox.Show(countFilesInDir(job.pathSource).ToString());
+
+            Thread thread = null;
+
+            if (job.type == "Full")
+            {
+                thread = new Thread(new ThreadStart(executeFullJob));
+            }
+            else if (job.type == "Diff")
+            {
+                thread = new Thread(new ThreadStart(executeDiffJob));
+            }
+            else
+            {
+                MessageBox.Show("Type incorrect/error");
+                return;
+            }
+
+            Dictionary<string, Thread> map = new Dictionary<string, Thread>();
+            map.Add(job.name, thread);
+
+            map[job.name].Start();
+
+            //thread.Start();
+        }
+
+        static void deleteJobFromXML(job job)
+        {
+            string path = @"..\..\..\Files\Jobs.xml";
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(path);
             var jobs = xmlDoc.SelectSingleNode("jobs");
-            var job = jobs.SelectSingleNode("job[name='" + jbIn.name + "']");
-            jobs.RemoveChild(job);
+            var jb = jobs.SelectSingleNode("job[name='" + job.name + "']");
+            jobs.RemoveChild(jb);
             xmlDoc.Save(path);
         }
 
-        static void addJobToXml(job jb)
+        static void addJobToXml(job job)
         {
 
             string path = @"..\..\..\Files\Jobs.xml";
@@ -97,24 +134,24 @@ namespace EasySave.Models
             xmlDoc.Load(path);
 
             XmlNode jobs = xmlDoc.SelectSingleNode("jobs");
-            XmlElement job = xmlDoc.CreateElement("job");
-            jobs.AppendChild(job);
+            XmlElement jb = xmlDoc.CreateElement("job");
+            jobs.AppendChild(jb);
 
             XmlElement name = xmlDoc.CreateElement("name");
             XmlElement source = xmlDoc.CreateElement("source");
             XmlElement target = xmlDoc.CreateElement("target");
             XmlElement type = xmlDoc.CreateElement("type");
 
-            name.InnerText = jb.name;
-            source.InnerText = jb.pathSource;
-            target.InnerText = jb.pathTarget;
-            type.InnerText = jb.type;
+            name.InnerText = job.name;
+            source.InnerText = job.pathSource;
+            target.InnerText = job.pathTarget;
+            type.InnerText = job.type;
 
 
-            job.AppendChild(name);
-            job.AppendChild(source);
-            job.AppendChild(target);
-            job.AppendChild(type);
+            jb.AppendChild(name);
+            jb.AppendChild(source);
+            jb.AppendChild(target);
+            jb.AppendChild(type);
 
             xmlDoc.Save(path);
 
@@ -147,6 +184,46 @@ namespace EasySave.Models
             return jobsInXml;
         }
 
+        public static int countFilesInDir(string path)
+        {
+            int count = 0;
+
+            try
+            {
+                // Récupération des fichiers du répertoire
+                string[] files = Directory.GetFiles(path);
+
+                // Incrémentation du compteur pour chaque fichier trouvé
+                count += files.Length;
+
+                // Récupération des sous-répertoires
+                string[] directories = Directory.GetDirectories(path);
+
+                // Pour chaque sous-répertoire, on appelle récursivement la méthode CountFiles
+                foreach (string directory in directories)
+                {
+                    count += countFilesInDir(directory);
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Gestion des erreurs d'autorisation d'accès
+                // Vous pouvez adapter ce bloc catch en fonction de vos besoins
+            }
+
+            return count;
+        }
+
+        static void executeFullJob()
+        {
+            MessageBox.Show("ptit full job oklm");
+        }
+
+        static void executeDiffJob()
+        {
+            //MessageBox.Show("ptit diff job oklm");
+        }
+
         public struct job                                             // Structure d'un travail de sauvegarde | Structure of a backup job
         {
             internal string name { get; set; }
@@ -154,5 +231,6 @@ namespace EasySave.Models
             internal string pathTarget { get; set; }
             internal string type { get; set; }
         }
+
     }
 }
