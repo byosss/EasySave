@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<jobs>
+  <job>
+    <name>test</name>
+    <source>C:\Users\Utilisateur\Desktop\test-PS\src</source>
+    <target>C:\Users\Utilisateur\Desktop\test-PS\trg</target>
+    <type>Full</type>
+  </job>
+  <job>
+    <name>test2</name>
+    <source>C:\Users\Utilisateur\Desktop\test-PS\src</source>
+    <target>C:\Users\Utilisateur\Desktop\test-PS\trg</target>
+    <type>Full</type>
+  </job>
+</jobs>

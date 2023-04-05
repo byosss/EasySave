@@ -1,0 +1,65 @@
+﻿<Window x:Class="EasySave.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EasySave"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <TabControl>
+        <TabItem Header="Create Jobs">
+            <Grid>
+                <Label Content="Jobs creation" HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="18" FontWeight="Bold"/>
+                
+                
+                <StackPanel Margin="40,80,500,0">
+                    <Label Content="Name" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30"></Label>
+                    <TextBox x:Name="textBoxJobName" Margin="10,0,0,5" VerticalAlignment="Center"/>
+                    
+                    <Label Content="Source" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30"></Label>
+                    <DockPanel Margin="10,0,0,5" VerticalAlignment="Center">
+                        <TextBox x:Name="textBoxJobSource" IsReadOnly="True" DockPanel.Dock="Left" Width="200" Margin="0,0,3,0"/>
+                        <Button Content="" Click="BrowseSource_Click" DockPanel.Dock="Right"/>
+                    </DockPanel>
+
+                    <Label Content="Target" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30"></Label>
+                    <DockPanel Margin="10,0,0,5" VerticalAlignment="Center">
+                        <TextBox x:Name="textBoxJobTarget" IsReadOnly="True" DockPanel.Dock="Left" Width="200" Margin="0,0,3,0"/>
+                        <Button Content="" Click="BrowseTarget_Click" DockPanel.Dock="Right"/>
+                    </DockPanel>
+
+                    <Label Content="Type" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30"></Label>
+                    <ComboBox x:Name="textBoxJobType" Margin="10, 0"  VerticalAlignment="Center">
+                        <ComboBoxItem IsSelected="True" Content="Full"/>
+                        <ComboBoxItem Content="Diff"/>
+                    </ComboBox>
+
+                    <Button Content="Create" Click="btnCreateJob" Width="50" Height="30" Margin="0,30,0,0"/>
+                </StackPanel>
+
+
+                <DataGrid Name="dgLstFile" AutoGenerateColumns="False" Grid.Row="0" Margin="0,100,30,50" HorizontalAlignment="Right" Width="400">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding JobName}"/>
+                        <DataGridTextColumn Header="Source" Binding="{Binding PathSource}"/>
+                        <DataGridTextColumn Header="Target" Binding="{Binding PathTarget}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="Execute Jobs">
+            <!-- Contenu de la deuxième page -->
+        </TabItem>
+        <TabItem Header="Delete Jobs">
+            <Label Content="Delete Jobs" HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="18" FontWeight="Bold"/>
+
+
+        </TabItem>
+        <TabItem Header="Settings">
+            <!-- Contenu de la troisième page -->
+        </TabItem>
+    </TabControl>
+</Window>
