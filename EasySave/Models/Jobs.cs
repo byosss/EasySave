@@ -126,6 +126,7 @@ namespace EasySave.Models
                 button.Content = "Pause";
                 button.HorizontalAlignment = HorizontalAlignment.Right;
                 button.Margin = new Thickness(7);
+                button.Click += (sender, e) => executedThreadPause(sender, e, job.name);
 
                 grid.Children.Add(label1);
                 grid.Children.Add(label2);
@@ -136,12 +137,13 @@ namespace EasySave.Models
                 stackPanel.Children.Add(border);
             });
             
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     label2.Content = i.ToString() + "/" + countFilesInDir(job.pathSource).ToString() + " files";
                 });
+                //Thread.Sleep(1000);
             }
             
 
@@ -152,6 +154,8 @@ namespace EasySave.Models
             });
 
         }
+
+        
 
         static void executeDiffJob(job job, StackPanel stackPanel)
         {
@@ -280,6 +284,12 @@ namespace EasySave.Models
                 return true;
             }
             return false;
+        }
+
+        static void executedThreadPause(object sender, RoutedEventArgs e, string jobName)
+        {
+            //MessageBox.Show("dans le modele ?");
+            Jobs.executedThread[jobName].Interrupt();
         }
 
 

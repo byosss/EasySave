@@ -61,6 +61,7 @@ namespace EasySave.Views
             viewModel.executeBackup(stackPanel);
         }
 
+
         void updateGrid()
         {
             List<MainWindowViewModel> list = new List<MainWindowViewModel>();

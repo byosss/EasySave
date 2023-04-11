@@ -2,14 +2,14 @@
 <jobs>
   <job>
     <name>test</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS\trg</target>
+    <source>C:\Users\Karim\Desktop\Dossier\Profil</source>
+    <target>C:\Users\Karim\Desktop\Dossier\Profil\cesi</target>
     <type>Full</type>
   </job>
   <job>
     <name>wow</name>
-    <source>C:\Users\Utilisateur\Desktop\autres</source>
-    <target>C:\Users\Utilisateur\Desktop\compte rendu</target>
+    <source>C:\Users\Karim\Desktop\Dossier\Profil</source>
+    <target>C:\Users\Karim\Desktop\Dossier\Profil\cesi</target>
     <type>Full</type>
   </job>
 </jobs>
