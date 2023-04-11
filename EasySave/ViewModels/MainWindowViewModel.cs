@@ -1,14 +1,23 @@
-﻿using EasySave.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using static EasySave.Models.Jobs;
+using System.Windows.Controls;
+using System.Windows.Input;
+using EasySave.Models;
+
 
 namespace EasySave.ViewModels
 {
     internal class MainWindowViewModel
     {
+        Jobs _jobs;
+
+        public MainWindowViewModel()
+        {
+            _jobs = new Jobs();
+        }
+
+
         private string _jobName = string.Empty;
         public string JobName
         {
@@ -63,62 +72,75 @@ namespace EasySave.ViewModels
 
         public void createBackup()
         {
-            Jobs.createJob(this.JobName, this.PathSource, this.PathTarget, this.Type);
+            _jobs.createJob(this.JobName, this.PathSource, this.PathTarget, this.Type);
         }
 
         public void deleteBackup()
         {
-            List<Jobs.job> jobs = this.loadJobs();
+            List<Jobs.job> jobs = _jobs.getJobsFromXml();
 
             for (int i = 0; i < jobs.Count; i++)
             {
                 if (jobs[i].name == this.JobName)
                 {
-                    Jobs.deleteJob(jobs[i]);
+                    _jobs.deleteJob(jobs[i]);
                     return;
                 }
             }
             MessageBox.Show("job not found");
         }
 
-        public bool executeBackup()
+        public void executeBackup(StackPanel stackPanel)
         {
-            List<Jobs.job> jobs = this.loadJobs();
+            List<Jobs.job> jobs = _jobs.getJobsFromXml();
 
             for (int i = 0; i < jobs.Count; i++)
             {
                 if (jobs[i].name == this.JobName)
                 {
-                    // ici fait le check dans le dictionnaire sur chatgpt
+                    // ici fait le check dans le dictionnaire
+                    if (_jobs.isThreadExecuted(this.JobName))
+                    {
+                        MessageBox.Show("job already executed");
+                        return;
+                    }
 
-                    Jobs.executeJob(jobs[i]);
-                    return false;
+                    _jobs.executeJob(jobs[i], stackPanel);
+
+                    return;
                 }
             }
 
             MessageBox.Show("job not found");
-            return true;
+            return;
         }
 
-        public (string, int, int) getThreadInfo(String jobName)
+
+        public List<MainWindowViewModel> loadJobs()
         {
-            List<Jobs.job> jobs = this.loadJobs();
+            List<MainWindowViewModel> list = new List<MainWindowViewModel>();
+
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+
+            List<Jobs.job> jobs = _jobs.getJobsFromXml();
+
 
             for (int i = 0; i < jobs.Count; i++)
             {
-                if (jobs[i].name == this.JobName)
+                list.Add(new MainWindowViewModel()
                 {
-
-                    return (jobs[i].name, 0, Jobs.countFilesInDir(jobs[i].pathSource));
-                }
+                    JobName = jobs[i].name,
+                    PathSource = jobs[i].pathSource,
+                    PathTarget = jobs[i].pathTarget,
+                    Type = jobs[i].type
+                });
             }
 
-            return ("error", 0, 0);
+
+            return list;
         }
 
-        public List<Jobs.job> loadJobs()
-        {
-            return Jobs.getJobsFromXml();
-        }
+
     }
+
 }

@@ -1,22 +1,21 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.Windows;
-using EasySave.ViewModels;
-using System.Xml.Linq;
-using System.Drawing;
-using System.Windows.Shapes;
 using System.Threading;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Reflection;
+using EasySave.Views;
 
 namespace EasySave.Models
 {
     internal class Jobs
     {
-        public static List<Dictionary<string, Thread>> executedThread = new List<Dictionary<string, Thread>>();
+        public static Dictionary<string, Thread> executedThread = new Dictionary<string, Thread>();
 
-        static public void createJob(string JobName, string PathSource, string PathTarget, string Type)
+        public void createJob(string JobName, string PathSource, string PathTarget, string Type)
         {
 
 
@@ -67,24 +66,23 @@ namespace EasySave.Models
             addJobToXml(jb);
         }
 
-        static public void deleteJob(job job)
+        public void deleteJob(job job)
         {
             deleteJobFromXML(job);
         }
 
-        static public void executeJob(job job)
+        public void executeJob(job job, StackPanel stackPanel)
         {
-            //MessageBox.Show(countFilesInDir(job.pathSource).ToString());
 
             Thread thread = null;
 
             if (job.type == "Full")
             {
-                thread = new Thread(new ThreadStart(executeFullJob));
+                thread = new Thread(() => executeFullJob(job, stackPanel));
             }
             else if (job.type == "Diff")
             {
-                thread = new Thread(new ThreadStart(executeDiffJob));
+                thread = new Thread(() => executeDiffJob(job, stackPanel));
             }
             else
             {
@@ -92,13 +90,74 @@ namespace EasySave.Models
                 return;
             }
 
-            Dictionary<string, Thread> map = new Dictionary<string, Thread>();
-            map.Add(job.name, thread);
+            thread.SetApartmentState(ApartmentState.STA);
+            executedThread.Add(job.name, thread);
 
-            map[job.name].Start();
-
-            //thread.Start();
+            executedThread[job.name].Start();
         }
+
+        static void executeFullJob(job job,StackPanel stackPanel)
+        {
+
+            Border border = null;
+            Label label2 = null;
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                border = new Border();
+                border.BorderBrush = Brushes.Black;
+                border.BorderThickness = new Thickness(1);
+                border.Height = 50;
+                border.VerticalAlignment = VerticalAlignment.Top;
+
+                Grid grid = new Grid();
+
+                Label label1 = new Label();
+                label1.Content = "name : " + job.name;
+                label1.HorizontalAlignment = HorizontalAlignment.Left;
+                label1.VerticalAlignment = VerticalAlignment.Center;
+
+                label2 = new Label();
+                label2.Content = "0" + "/" + countFilesInDir(job.pathSource).ToString() + " files";
+                label2.HorizontalAlignment = HorizontalAlignment.Center;
+                label2.VerticalAlignment = VerticalAlignment.Center;
+
+                Button button = new Button();
+                button.Content = "Pause";
+                button.HorizontalAlignment = HorizontalAlignment.Right;
+                button.Margin = new Thickness(7);
+
+                grid.Children.Add(label1);
+                grid.Children.Add(label2);
+                grid.Children.Add(button);
+
+                border.Child = grid;
+
+                stackPanel.Children.Add(border);
+            });
+            
+            for (int i = 0; i < 10000; i++)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    label2.Content = i.ToString() + "/" + countFilesInDir(job.pathSource).ToString() + " files";
+                });
+            }
+            
+
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                stackPanel.Children.Remove(border);
+            });
+
+        }
+
+        static void executeDiffJob(job job, StackPanel stackPanel)
+        {
+            MessageBox.Show("ptit diff job oklm");
+        }
+
 
         static void deleteJobFromXML(job job)
         {
@@ -157,7 +216,7 @@ namespace EasySave.Models
 
         }
 
-        public static List<job> getJobsFromXml()
+        public List<job> getJobsFromXml()
         {
             List<job> jobsInXml = new List<job>();
 
@@ -214,15 +273,15 @@ namespace EasySave.Models
             return count;
         }
 
-        static void executeFullJob()
+        public bool isThreadExecuted(string jobName)
         {
-            MessageBox.Show("ptit full job oklm");
+            if (executedThread.ContainsKey(jobName))
+            {
+                return true;
+            }
+            return false;
         }
 
-        static void executeDiffJob()
-        {
-            //MessageBox.Show("ptit diff job oklm");
-        }
 
         public struct job                                             // Structure d'un travail de sauvegarde | Structure of a backup job
         {

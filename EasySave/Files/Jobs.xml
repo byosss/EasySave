@@ -6,4 +6,10 @@
     <target>C:\Users\Utilisateur\Desktop\test-PS\trg</target>
     <type>Full</type>
   </job>
+  <job>
+    <name>wow</name>
+    <source>C:\Users\Utilisateur\Desktop\autres</source>
+    <target>C:\Users\Utilisateur\Desktop\compte rendu</target>
+    <type>Full</type>
+  </job>
 </jobs>

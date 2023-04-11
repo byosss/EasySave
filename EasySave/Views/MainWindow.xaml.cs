@@ -1,31 +1,26 @@
-﻿using EasySave.Models;
-using EasySave.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static EasySave.Models.Jobs;
 
-namespace EasySave
+using EasySave.ViewModels;
+
+
+namespace EasySave.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
+        MainWindowViewModel viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            viewModel = new MainWindowViewModel();
+
             updateGrid();
         }
 
@@ -63,14 +58,7 @@ namespace EasySave
                 JobName = textBoxJobExecute.Text
             };
 
-            bool error = viewModel.executeBackup();
-
-            if (!error) 
-            {
-                (string jobName, int filePassed, int totalFiles) = viewModel.getThreadInfo(textBoxJobExecute.Text);
-
-                addExecutedJob(jobName, filePassed, totalFiles);
-            }
+            viewModel.executeBackup(stackPanel);
         }
 
         void updateGrid()
@@ -79,65 +67,14 @@ namespace EasySave
 
             MainWindowViewModel viewModel = new MainWindowViewModel();
 
-            List<Jobs.job> jobs = viewModel.loadJobs();
-
-
-            for (int i = 0; i < jobs.Count; i++)
-            {
-                list.Add(new MainWindowViewModel()
-                {
-                    JobName = jobs[i].name,
-                    PathSource = jobs[i].pathSource,
-                    PathTarget = jobs[i].pathTarget,
-                    Type = jobs[i].type
-                });
-            }
+            list = viewModel.loadJobs();
 
             dgLstFile1.ItemsSource = list;
             dgLstFile2.ItemsSource = list;
+            dgLstFile3.ItemsSource = list;
 
         }
 
-        void addExecutedJob(string jobName, int filePassed, int totalFiles) 
-        {
-            // Créez le Border
-            Border border = new Border();
-            border.BorderBrush = Brushes.Black;
-            border.BorderThickness = new Thickness(1);
-            border.Height = 50;
-            border.VerticalAlignment = VerticalAlignment.Top;
-
-            // Créez le Grid
-            Grid grid = new Grid();
-
-            // Créez les Labels
-            Label label1 = new Label();
-            label1.Content = "name : " + jobName;
-            label1.HorizontalAlignment = HorizontalAlignment.Left;
-            label1.VerticalAlignment = VerticalAlignment.Center;
-
-            Label label2 = new Label();
-            label2.Content = filePassed + "/" + totalFiles + " files";
-            label2.HorizontalAlignment = HorizontalAlignment.Center;
-            label2.VerticalAlignment = VerticalAlignment.Center;
-
-            // Créez le Button
-            Button button = new Button();
-            button.Content = "Pause";
-            button.HorizontalAlignment = HorizontalAlignment.Right;
-            button.Margin = new Thickness(7);
-
-            // Ajoutez les contrôles au Grid
-            grid.Children.Add(label1);
-            grid.Children.Add(label2);
-            grid.Children.Add(button);
-
-            // Ajoutez le Grid au Border
-            border.Child = grid;
-
-            // Ajoutez le Border au StackPanel
-            stackPanel.Children.Add(border);
-        }
 
         private void BrowseSource_Click(object sender, RoutedEventArgs e)
         {
