@@ -6,14 +6,14 @@ using System.Windows;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Reflection;
-using EasySave.Views;
+
 
 namespace EasySave.Models
 {
     internal class Jobs
     {
         public static Dictionary<string, Thread> executedThread = new Dictionary<string, Thread>();
+        public static Dictionary<string, bool> threadIsPaused = new Dictionary<string, bool>();
 
         public void createJob(string JobName, string PathSource, string PathTarget, string Type)
         {
@@ -74,8 +74,19 @@ namespace EasySave.Models
         public void executeJob(job job, StackPanel stackPanel)
         {
 
-            Thread thread = null;
+            if (!Directory.Exists(job.pathSource))
+            {
+                MessageBox.Show("Le chemin d'accès source n'existe pas.");
+                return;
+            }
+            if (!Directory.Exists(job.pathTarget))
+            {
+                Directory.CreateDirectory(job.pathTarget);
+            }
+            Directory.CreateDirectory(job.pathTarget);
 
+
+            Thread thread = null;
             if (job.type == "Full")
             {
                 thread = new Thread(() => executeFullJob(job, stackPanel));
@@ -84,19 +95,16 @@ namespace EasySave.Models
             {
                 thread = new Thread(() => executeDiffJob(job, stackPanel));
             }
-            else
-            {
-                MessageBox.Show("Type incorrect/error");
-                return;
-            }
 
-            thread.SetApartmentState(ApartmentState.STA);
+
             executedThread.Add(job.name, thread);
-
+            threadIsPaused.Add(job.name, false);
             executedThread[job.name].Start();
         }
 
-        static void executeFullJob(job job,StackPanel stackPanel)
+
+
+        static void executeFullJob(job job, StackPanel stackPanel)
         {
 
             Border border = null;
@@ -136,16 +144,15 @@ namespace EasySave.Models
 
                 stackPanel.Children.Add(border);
             });
-            
-            for (int i = 0; i < 100000; i++)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    label2.Content = i.ToString() + "/" + countFilesInDir(job.pathSource).ToString() + " files";
-                });
-                //Thread.Sleep(1000);
-            }
-            
+
+
+            //Directory.Delete(job.pathTarget);
+
+            int count = 0;
+            CopyAll(new DirectoryInfo(job.pathSource), new DirectoryInfo(job.pathTarget), job.name,label2, ref count, countFilesInDir(job.pathSource));
+            //BackupDirectory(new DirectoryInfo(job.pathSource), new DirectoryInfo(job.pathTarget));
+
+            Thread.Sleep(1000);
 
 
             Application.Current.Dispatcher.Invoke(() =>
@@ -153,13 +160,68 @@ namespace EasySave.Models
                 stackPanel.Children.Remove(border);
             });
 
+            executedThread.Remove(job.name);
+            threadIsPaused.Remove(job.name);
+
         }
 
-        
 
         static void executeDiffJob(job job, StackPanel stackPanel)
         {
             MessageBox.Show("ptit diff job oklm");
+        }
+
+
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target, string jobName, Label label, ref int count, int totalFiles)
+        {
+            // Copie de tous les fichiers du répertoire source vers le répertoire cible
+            foreach (FileInfo file in source.GetFiles())
+            {
+                while (threadIsPaused[jobName])
+                {
+                    Thread.Sleep(250);
+                }
+                Thread.Sleep(50);
+                file.CopyTo(Path.Combine(target.FullName, file.Name), true);
+                count++;
+                int temp = count;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    label.Content = temp.ToString() + "/" + totalFiles.ToString() + " files";
+                });
+            }
+
+            // Copie de tous les sous-dossiers du répertoire source vers le répertoire cible
+            foreach (DirectoryInfo subDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(subDir.Name);
+                CopyAll(subDir, nextTargetSubDir, jobName, label, ref count, totalFiles);
+            }
+        }
+
+        static void BackupDirectory(DirectoryInfo source, DirectoryInfo target)
+        {
+            if (!source.Exists)
+            {
+                throw new DirectoryNotFoundException($"Le répertoire source {source.FullName} n'existe pas.");
+            }
+
+            if (!target.Exists)
+            {
+                target.Create();
+            }
+
+            foreach (FileInfo file in source.GetFiles())
+            {
+                string targetFilePath = Path.Combine(target.FullName, file.Name);
+                file.CopyTo(targetFilePath, true);
+            }
+
+            foreach (DirectoryInfo subDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(subDir.Name);
+                BackupDirectory(subDir, nextTargetSubDir);
+            }
         }
 
 
@@ -271,7 +333,6 @@ namespace EasySave.Models
             catch (UnauthorizedAccessException)
             {
                 // Gestion des erreurs d'autorisation d'accès
-                // Vous pouvez adapter ce bloc catch en fonction de vos besoins
             }
 
             return count;
@@ -288,12 +349,18 @@ namespace EasySave.Models
 
         static void executedThreadPause(object sender, RoutedEventArgs e, string jobName)
         {
-            //MessageBox.Show("dans le modele ?");
-            Jobs.executedThread[jobName].Interrupt();
+            if (threadIsPaused[jobName])
+            {
+                threadIsPaused[jobName] = false;
+            }
+            else
+            {
+                threadIsPaused[jobName] = true;
+            }
         }
 
 
-        public struct job                                             // Structure d'un travail de sauvegarde | Structure of a backup job
+        public struct job
         {
             internal string name { get; set; }
             internal string pathSource { get; set; }
