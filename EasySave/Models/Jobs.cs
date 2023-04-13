@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Xml;
 using System.Windows;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Drawing;
 
 
 namespace EasySave.Models
@@ -14,6 +17,11 @@ namespace EasySave.Models
     {
         public static Dictionary<string, Thread> executedThread = new Dictionary<string, Thread>();
         public static Dictionary<string, bool> threadIsPaused = new Dictionary<string, bool>();
+
+        static List<string> extensionToPrioritize = new List<string> { "docx", "xls" };
+        static List<string> extensionToCrypt = new List<string> { "pdf", "txt" };
+
+        string XORKey = "Saucisse";
 
         public void createJob(string JobName, string PathSource, string PathTarget, string Type)
         {
@@ -148,11 +156,66 @@ namespace EasySave.Models
 
             //Directory.Delete(job.pathTarget);
 
-            int count = 0;
-            CopyAll(new DirectoryInfo(job.pathSource), new DirectoryInfo(job.pathTarget), job.name,label2, ref count, countFilesInDir(job.pathSource));
-            //BackupDirectory(new DirectoryInfo(job.pathSource), new DirectoryInfo(job.pathTarget));
 
-            Thread.Sleep(1000);
+            DirectoryInfo sourceDir = new DirectoryInfo(job.pathSource);
+            DirectoryInfo targetDir = new DirectoryInfo(job.pathTarget);
+
+            int count = 0;
+            int totalFilesInDir = countFilesInDir(sourceDir.FullName);
+
+            // Créer tous les dossiers et sous-dossiers dans le répertoire cible
+            targetDir.CreateSubdirectory(sourceDir.Name);
+            foreach (DirectoryInfo dir in sourceDir.GetDirectories("*", SearchOption.AllDirectories))
+            {
+                targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
+            }
+
+            // Copier les fichiers prioritaires et les autres fichiers
+            foreach (string ext in extensionToPrioritize)
+            {
+                foreach (FileInfo file in sourceDir.GetFiles("*." + ext, SearchOption.AllDirectories))
+                {
+                    while (threadIsPaused[job.name])
+                    {
+                        Thread.Sleep(250);
+                    }
+
+                    string targetFile = Path.Combine(targetDir.FullName, file.FullName.Substring(sourceDir.FullName.Length + 1));
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
+                    File.Copy(file.FullName, targetFile, true);
+
+                    Thread.Sleep(50);
+                    count++;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        label2.Content = count.ToString() + "/" + totalFilesInDir.ToString() + " files";
+                    });
+                }
+            }
+            
+            foreach (FileInfo file in sourceDir.GetFiles("*", SearchOption.AllDirectories))
+            {
+                if (!extensionToPrioritize.Contains(file.Extension.TrimStart('.')) && !extensionToCrypt.Contains(file.Extension.TrimStart('.')))
+                {
+                    while (threadIsPaused[job.name])
+                    {
+                        Thread.Sleep(250);
+                    }
+
+                    string targetFile = Path.Combine(targetDir.FullName, file.FullName.Substring(sourceDir.FullName.Length + 1));
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
+                    File.Copy(file.FullName, targetFile, true);
+
+                    Thread.Sleep(50);
+                    count++;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        label2.Content = count.ToString() + "/" + countFilesInDir(sourceDir.FullName).ToString() + " files";
+                    });
+                }
+            }
+
+
 
 
             Application.Current.Dispatcher.Invoke(() =>
@@ -168,61 +231,128 @@ namespace EasySave.Models
 
         static void executeDiffJob(job job, StackPanel stackPanel)
         {
-            MessageBox.Show("ptit diff job oklm");
-        }
+            Border border = null;
+            Label label2 = null;
 
-
-        private static void CopyAll(DirectoryInfo source, DirectoryInfo target, string jobName, Label label, ref int count, int totalFiles)
-        {
-            // Copie de tous les fichiers du répertoire source vers le répertoire cible
-            foreach (FileInfo file in source.GetFiles())
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                while (threadIsPaused[jobName])
+                border = new Border();
+                border.BorderBrush = Brushes.Black;
+                border.BorderThickness = new Thickness(1);
+                border.Height = 50;
+                border.VerticalAlignment = VerticalAlignment.Top;
+
+                Grid grid = new Grid();
+
+                Label label1 = new Label();
+                label1.Content = "name : " + job.name;
+                label1.HorizontalAlignment = HorizontalAlignment.Left;
+                label1.VerticalAlignment = VerticalAlignment.Center;
+
+                label2 = new Label();
+                label2.Content = "0" + "/" + countFilesInDir(job.pathSource).ToString() + " files";
+                label2.HorizontalAlignment = HorizontalAlignment.Center;
+                label2.VerticalAlignment = VerticalAlignment.Center;
+
+                Button button = new Button();
+                button.Content = "Pause";
+                button.HorizontalAlignment = HorizontalAlignment.Right;
+                button.Margin = new Thickness(7);
+                button.Click += (sender, e) => executedThreadPause(sender, e, job.name);
+
+                grid.Children.Add(label1);
+                grid.Children.Add(label2);
+                grid.Children.Add(button);
+
+                border.Child = grid;
+
+                stackPanel.Children.Add(border);
+            });
+
+
+            Directory.Delete(job.pathTarget);
+
+
+            DirectoryInfo sourceDir = new DirectoryInfo(job.pathSource);
+            DirectoryInfo targetDir = new DirectoryInfo(job.pathTarget);
+
+            int count = 0;
+            int totalFilesInDir = countFilesInDir(sourceDir.FullName);
+
+            // Créer tous les dossiers et sous-dossiers dans le répertoire cible
+            targetDir.CreateSubdirectory(sourceDir.Name);
+            foreach (DirectoryInfo dir in sourceDir.GetDirectories("*", SearchOption.AllDirectories))
+            {
+                targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
+            }
+
+            // Copier les fichiers prioritaires et les autres fichiers
+            foreach (string ext in extensionToPrioritize)
+            {
+                foreach (FileInfo sourceFile in sourceDir.GetFiles("*." + ext, SearchOption.AllDirectories))
                 {
-                    Thread.Sleep(250);
+                    while (threadIsPaused[job.name])
+                    {
+                        Thread.Sleep(250);
+                    }
+
+                    FileInfo targetFile = new FileInfo(Path.Combine(targetDir.FullName, sourceFile.FullName.Substring(sourceDir.FullName.Length + 1)));
+
+                    if (!targetFile.Exists || sourceFile.LastWriteTimeUtc > targetFile.LastWriteTimeUtc)
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(targetFile.FullName));
+                        File.Copy(sourceFile.FullName, targetFile.FullName, true);
+                    }
+
+                    Thread.Sleep(50);
+                    count++;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        label2.Content = count.ToString() + "/" + totalFilesInDir.ToString() + " files";
+                    });
                 }
-                Thread.Sleep(50);
-                file.CopyTo(Path.Combine(target.FullName, file.Name), true);
-                count++;
-                int temp = count;
-                Application.Current.Dispatcher.Invoke(() =>
+            }
+
+            foreach (FileInfo sourceFile in sourceDir.GetFiles("*", SearchOption.AllDirectories))
+            {
+                if (!extensionToPrioritize.Contains(sourceFile.Extension.TrimStart('.')) && !extensionToCrypt.Contains(sourceFile.Extension.TrimStart('.')))
                 {
-                    label.Content = temp.ToString() + "/" + totalFiles.ToString() + " files";
-                });
+                    while (threadIsPaused[job.name])
+                    {
+                        Thread.Sleep(250);
+                    }
+
+                    FileInfo targetFile = new FileInfo(Path.Combine(targetDir.FullName, sourceFile.FullName.Substring(sourceDir.FullName.Length + 1)));
+
+                    if (!targetFile.Exists || sourceFile.LastWriteTimeUtc > targetFile.LastWriteTimeUtc)
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(targetFile.FullName));
+                        File.Copy(sourceFile.FullName, targetFile.FullName, true);
+                    }
+
+                    Thread.Sleep(50);
+                    count++;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        label2.Content = count.ToString() + "/" + countFilesInDir(sourceDir.FullName).ToString() + " files";
+                    });
+                }
             }
 
-            // Copie de tous les sous-dossiers du répertoire source vers le répertoire cible
-            foreach (DirectoryInfo subDir in source.GetDirectories())
+
+
+
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(subDir.Name);
-                CopyAll(subDir, nextTargetSubDir, jobName, label, ref count, totalFiles);
-            }
+                stackPanel.Children.Remove(border);
+            });
+
+            executedThread.Remove(job.name);
+            threadIsPaused.Remove(job.name);
         }
 
-        static void BackupDirectory(DirectoryInfo source, DirectoryInfo target)
-        {
-            if (!source.Exists)
-            {
-                throw new DirectoryNotFoundException($"Le répertoire source {source.FullName} n'existe pas.");
-            }
 
-            if (!target.Exists)
-            {
-                target.Create();
-            }
 
-            foreach (FileInfo file in source.GetFiles())
-            {
-                string targetFilePath = Path.Combine(target.FullName, file.Name);
-                file.CopyTo(targetFilePath, true);
-            }
-
-            foreach (DirectoryInfo subDir in source.GetDirectories())
-            {
-                DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(subDir.Name);
-                BackupDirectory(subDir, nextTargetSubDir);
-            }
-        }
 
 
         static void deleteJobFromXML(job job)
