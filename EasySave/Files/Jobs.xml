@@ -24,4 +24,16 @@
     <target>C:\Users\Utilisateur\Desktop\test-PS3\trg</target>
     <type>Full</type>
   </job>
+  <job>
+    <name>pc</name>
+    <source>C:\Users\Karim\Desktop\ha</source>
+    <target>C:\Users\Karim\Desktop\trg</target>
+    <type>Full</type>
+  </job>
+  <job>
+    <name>pc2</name>
+    <source>C:\Users\Karim\Desktop\ha</source>
+    <target>C:\Users\Karim\Desktop\trg</target>
+    <type>Diff</type>
+  </job>
 </jobs>

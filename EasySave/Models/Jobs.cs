@@ -164,7 +164,6 @@ namespace EasySave.Models
             int totalFilesInDir = countFilesInDir(sourceDir.FullName);
 
             // Créer tous les dossiers et sous-dossiers dans le répertoire cible
-            targetDir.CreateSubdirectory(sourceDir.Name);
             foreach (DirectoryInfo dir in sourceDir.GetDirectories("*", SearchOption.AllDirectories))
             {
                 targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
@@ -195,7 +194,7 @@ namespace EasySave.Models
             
             foreach (FileInfo file in sourceDir.GetFiles("*", SearchOption.AllDirectories))
             {
-                if (!extensionToPrioritize.Contains(file.Extension.TrimStart('.')) && !extensionToCrypt.Contains(file.Extension.TrimStart('.')))
+                if (!extensionToPrioritize.Contains(file.Extension.TrimStart('.')))
                 {
                     while (threadIsPaused[job.name])
                     {
@@ -280,7 +279,6 @@ namespace EasySave.Models
             int totalFilesInDir = countFilesInDir(sourceDir.FullName);
 
             // Créer tous les dossiers et sous-dossiers dans le répertoire cible
-            targetDir.CreateSubdirectory(sourceDir.Name);
             foreach (DirectoryInfo dir in sourceDir.GetDirectories("*", SearchOption.AllDirectories))
             {
                 targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
@@ -315,7 +313,7 @@ namespace EasySave.Models
 
             foreach (FileInfo sourceFile in sourceDir.GetFiles("*", SearchOption.AllDirectories))
             {
-                if (!extensionToPrioritize.Contains(sourceFile.Extension.TrimStart('.')) && !extensionToCrypt.Contains(sourceFile.Extension.TrimStart('.')))
+                if (!extensionToPrioritize.Contains(sourceFile.Extension.TrimStart('.')))
                 {
                     while (threadIsPaused[job.name])
                     {
