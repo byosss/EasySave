@@ -7,21 +7,15 @@
     <type>Full</type>
   </job>
   <job>
-    <name>test</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS1\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS1\trg</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>zut</name>
-    <source>C:\Users\Utilisateur\Desktop\rationalisation</source>
-    <target>C:\Users\Utilisateur\Desktop\haaa</target>
-    <type>Full</type>
-  </job>
-  <job>
     <name>haha</name>
     <source>C:\Users\Utilisateur\Desktop\test-PS3\src</source>
     <target>C:\Users\Utilisateur\Desktop\test-PS3\trg</target>
+    <type>Full</type>
+  </job>
+  <job>
+    <name>test</name>
+    <source>C:\Users\Utilisateur\Desktop\test-PS1\src</source>
+    <target>C:\Users\Utilisateur\Desktop\test-PS1\trg</target>
     <type>Full</type>
   </job>
 </jobs>

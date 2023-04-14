@@ -11,10 +11,14 @@ namespace EasySave.ViewModels
     internal class MainWindowViewModel
     {
         Jobs _jobs;
+        stateFile _stateFile;
 
         public MainWindowViewModel()
         {
             _jobs = new Jobs();
+            _stateFile = new stateFile();
+
+            _stateFile.stateFileInnit();
         }
 
 
@@ -77,7 +81,7 @@ namespace EasySave.ViewModels
 
         public void deleteBackup()
         {
-            List<Jobs.job> jobs = _jobs.getJobsFromXml();
+            List<job> jobs = _jobs.getJobsFromXml();
 
             for (int i = 0; i < jobs.Count; i++)
             {
@@ -92,7 +96,7 @@ namespace EasySave.ViewModels
 
         public void executeBackup(StackPanel stackPanel)
         {
-            List<Jobs.job> jobs = _jobs.getJobsFromXml();
+            List<job> jobs = _jobs.getJobsFromXml();
 
             for (int i = 0; i < jobs.Count; i++)
             {
@@ -122,7 +126,7 @@ namespace EasySave.ViewModels
 
             MainWindowViewModel viewModel = new MainWindowViewModel();
 
-            List<Jobs.job> jobs = _jobs.getJobsFromXml();
+            List<job> jobs = _jobs.getJobsFromXml();
 
 
             for (int i = 0; i < jobs.Count; i++)

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Drawing;
+using System.Xml.Linq;
 
 
 namespace EasySave.Models
@@ -72,11 +73,15 @@ namespace EasySave.Models
 
 
             addJobToXml(jb);
+
+            state state = new state(JobName, "", "", "END", 0, 0, 0, 0);
+            stateFile.addStateFile(state);
         }
 
         public void deleteJob(job job)
         {
             deleteJobFromXML(job);
+            stateFile.deleteStateFile(job.name);
         }
 
         public void executeJob(job job, StackPanel stackPanel)
@@ -184,6 +189,14 @@ namespace EasySave.Models
                     Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
                     File.Copy(file.FullName, targetFile, true);
 
+                    lock (stateFile.stateFileLock)
+                    {
+                        state state = new state(job.name, file.FullName, targetFile, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir) * 100f);
+                        stateFile.updateStateFile(state);
+                    }
+                    
+
+
                     Thread.Sleep(50);
                     count++;
                     Application.Current.Dispatcher.Invoke(() =>
@@ -206,6 +219,14 @@ namespace EasySave.Models
                     Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
                     File.Copy(file.FullName, targetFile, true);
 
+
+                    lock (stateFile.stateFileLock)
+                    {
+                        state state = new state(job.name, file.FullName, targetFile, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir) * 100f);
+                        stateFile.updateStateFile(state);
+                    }
+
+
                     Thread.Sleep(50);
                     count++;
                     Application.Current.Dispatcher.Invoke(() =>
@@ -215,8 +236,11 @@ namespace EasySave.Models
                 }
             }
 
-
-
+            lock (stateFile.stateFileLock)
+            {
+                stateFile.updateStateFile(new state(job.name, "", "", "END", 0, 0, 0, 0));
+            }
+            
 
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -490,13 +514,14 @@ namespace EasySave.Models
         }
 
 
-        public struct job
-        {
-            internal string name { get; set; }
-            internal string pathSource { get; set; }
-            internal string pathTarget { get; set; }
-            internal string type { get; set; }
-        }
+        
 
+    }
+    public struct job
+    {
+        internal string name { get; set; }
+        internal string pathSource { get; set; }
+        internal string pathTarget { get; set; }
+        internal string type { get; set; }
     }
 }
