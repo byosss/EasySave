@@ -16,6 +16,9 @@ namespace EasySave.Models
         {
             string path = @"..\..\..\Files\Setup.xml";
 
+            string currentDirectory = System.IO.Directory.GetCurrentDirectory();
+            string filePath = System.IO.Path.Combine(currentDirectory, @"Files\Setup.xml");
+
             // Charger le document XML
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(path);
@@ -41,7 +44,7 @@ namespace EasySave.Models
 
             if (isTypeJson)
             {
-                string path = @"..\..\..\file\logs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
+                string path = @"..\..\..\Files\Logs" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
 
                 if (!File.Exists(path))
                 {
@@ -66,7 +69,7 @@ namespace EasySave.Models
             }
             else if (!isTypeJson)
             {
-                string path = @"..\..\..\file\logs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
+                string path = @"..\..\..\Files\Logs" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
 
                 if (!File.Exists(path))
                 {
