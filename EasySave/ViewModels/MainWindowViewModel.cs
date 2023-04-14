@@ -11,14 +11,16 @@ namespace EasySave.ViewModels
     internal class MainWindowViewModel
     {
         Jobs _jobs;
-        stateFile _stateFile;
+        Logs _logs;
+        StateFile _stateFile;
 
         public MainWindowViewModel()
         {
             _jobs = new Jobs();
-            _stateFile = new stateFile();
+            _logs = new Logs();
+            _stateFile = new StateFile();
 
-            _stateFile.stateFileInnit();
+            //_stateFile.stateFileInnit();
         }
 
 

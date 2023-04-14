@@ -75,13 +75,13 @@ namespace EasySave.Models
             addJobToXml(jb);
 
             state state = new state(JobName, "", "", "END", 0, 0, 0, 0);
-            stateFile.addStateFile(state);
+            StateFile.addStateFile(state);
         }
 
         public void deleteJob(job job)
         {
             deleteJobFromXML(job);
-            stateFile.deleteStateFile(job.name);
+            StateFile.deleteStateFile(job.name);
         }
 
         public void executeJob(job job, StackPanel stackPanel)
@@ -188,10 +188,10 @@ namespace EasySave.Models
                     Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
                     File.Copy(file.FullName, targetFile, true);
 
-                    lock (stateFile.stateFileLock)
+                    lock (StateFile.stateFileLock)
                     {
                         state state = new state(job.name, file.FullName, targetFile, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir) * 100f);
-                        stateFile.updateStateFile(state);
+                        StateFile.updateStateFile(state);
                     }
                     
 
@@ -219,10 +219,10 @@ namespace EasySave.Models
                     File.Copy(file.FullName, targetFile, true);
 
 
-                    lock (stateFile.stateFileLock)
+                    lock (StateFile.stateFileLock)
                     {
                         state state = new state(job.name, file.FullName, targetFile, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir) * 100f);
-                        stateFile.updateStateFile(state);
+                        StateFile.updateStateFile(state);
                     }
 
 
@@ -235,9 +235,9 @@ namespace EasySave.Models
                 }
             }
 
-            lock (stateFile.stateFileLock)
+            lock (StateFile.stateFileLock)
             {
-                stateFile.updateStateFile(new state(job.name, "", "", "END", 0, 0, 0, 0));
+                StateFile.updateStateFile(new state(job.name, "", "", "END", 0, 0, 0, 0));
             }
             
 
@@ -250,7 +250,6 @@ namespace EasySave.Models
             threadIsPaused.Remove(job.name);
 
         }
-
 
         static void executeDiffJob(job job, StackPanel stackPanel)
         {
@@ -376,18 +375,6 @@ namespace EasySave.Models
 
 
 
-
-        static void deleteJobFromXML(job job)
-        {
-            string path = @"..\..\..\Files\Jobs.xml";
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(path);
-            var jobs = xmlDoc.SelectSingleNode("jobs");
-            var jb = jobs.SelectSingleNode("job[name='" + job.name + "']");
-            jobs.RemoveChild(jb);
-            xmlDoc.Save(path);
-        }
-
         static void addJobToXml(job job)
         {
 
@@ -432,6 +419,17 @@ namespace EasySave.Models
 
             xmlDoc.Save(path);
 
+        }
+
+        static void deleteJobFromXML(job job)
+        {
+            string path = @"..\..\..\Files\Jobs.xml";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(path);
+            var jobs = xmlDoc.SelectSingleNode("jobs");
+            var jb = jobs.SelectSingleNode("job[name='" + job.name + "']");
+            jobs.RemoveChild(jb);
+            xmlDoc.Save(path);
         }
 
         public List<job> getJobsFromXml()

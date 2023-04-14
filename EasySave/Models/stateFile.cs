@@ -6,12 +6,12 @@ using Newtonsoft.Json;
 
 namespace EasySave.Models
 {
-    internal class stateFile
+    internal class StateFile
     {
 
         public static object stateFileLock = new object();
 
-        public void stateFileInnit()
+        public StateFile()
         {
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave_states.json");
 
