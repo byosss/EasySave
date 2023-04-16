@@ -19,8 +19,6 @@ namespace EasySave.ViewModels
             _jobs = new Jobs();
             _logs = new Logs();
             _stateFile = new StateFile();
-
-            //_stateFile.stateFileInnit();
         }
 
 

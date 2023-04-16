@@ -1,21 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <jobs>
   <job>
-    <name>wow</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS2\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS2\trg</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>haha</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS3\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS3\trg</target>
-    <type>Full</type>
-  </job>
-  <job>
     <name>test</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS1\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS1\trg</target>
+    <source>C:\Users\Karim\Desktop\ha</source>
+    <target>C:\Users\Karim\Desktop\trg</target>
+    <type>Full</type>
+  </job>
+  <job>
+    <name>wow</name>
+    <source>C:\Users\Karim\Documents\Unreal Projects</source>
+    <target>C:\Users\Karim\Desktop\ho</target>
     <type>Full</type>
   </job>
 </jobs>

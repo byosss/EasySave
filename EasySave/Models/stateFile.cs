@@ -13,12 +13,9 @@ namespace EasySave.Models
 
         public StateFile()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave_states.json");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\EasySave_states.json");
 
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
+
             File.WriteAllText(path, "[]");
 
 
@@ -36,7 +33,7 @@ namespace EasySave.Models
 
         public static void addStateFile(state saveState)
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave_states.json");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\EasySave_states.json");
 
             if (!File.Exists(path))
             {
@@ -62,7 +59,7 @@ namespace EasySave.Models
 
         public static void updateStateFile(state saveState)
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave_states.json");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\EasySave_states.json");
 
             if (!File.Exists(path))
             {
@@ -90,8 +87,9 @@ namespace EasySave.Models
             //Convertit notre liste en un json avec des indentations
             var StringToJson = JsonConvert.SerializeObject(stateList, Newtonsoft.Json.Formatting.Indented);
 
-            
+            File.WriteAllText(path, StringToJson);
 
+            /*
             while (true)
             {
                 try
@@ -114,13 +112,13 @@ namespace EasySave.Models
 
                 /*catch (System.Exception ex)
                 {
-                }*/
-            }
+                }
+            }*/
         }
 
         public static void deleteStateFile(string fileStateName)
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave_states.json");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\EasySave_states.json");
 
             if (!File.Exists(path))
             {

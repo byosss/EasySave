@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -14,17 +15,17 @@ namespace EasySave.Models
 
         internal Logs()
         {
-            string path = @"..\..\..\Files\Setup.xml";
+            
 
-            string currentDirectory = System.IO.Directory.GetCurrentDirectory();
-            string filePath = System.IO.Path.Combine(currentDirectory, @"Files\Setup.xml");
+            string path = @"..\..\..\Files\Setup.xml";
 
             // Charger le document XML
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(path);
 
             // Trouver l'élément 'logsFormat'
-            XmlNode logsFormatNode = xmlDoc.SelectSingleNode("//logsFormat");
+            XmlNode logsFormatNode = xmlDoc.SelectSingleNode("logsFormat");
+
 
             if (logsFormatNode.InnerText == "JSON")
             {
@@ -41,10 +42,9 @@ namespace EasySave.Models
         public static void addLogs(log log)
         {
 
-
             if (isTypeJson)
             {
-                string path = @"..\..\..\Files\Logs" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\logs", DateTime.Now.ToString("dd-MM-yyyy") + ".json");
 
                 if (!File.Exists(path))
                 {
@@ -69,7 +69,7 @@ namespace EasySave.Models
             }
             else if (!isTypeJson)
             {
-                string path = @"..\..\..\Files\Logs" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\logs", DateTime.Now.ToString("dd-MM-yyyy") + ".xml");
 
                 if (!File.Exists(path))
                 {
@@ -90,8 +90,8 @@ namespace EasySave.Models
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(path);
 
-                XmlNode jobs = xmlDoc.SelectSingleNode("lobs");
-                XmlElement jb = xmlDoc.CreateElement("lob");
+                XmlNode jobs = xmlDoc.SelectSingleNode("logs");
+                XmlElement jb = xmlDoc.CreateElement("log");
                 jobs.AppendChild(jb);
 
                 XmlElement name = xmlDoc.CreateElement("name");
@@ -141,6 +141,15 @@ namespace EasySave.Models
 
             // Enregistrer les modifications dans le fichier XML
             xmlDoc.Save(path);
+
+            if (logsFormatNode.InnerText == "JSON")
+            {
+                isTypeJson = true;
+            }
+            else if (logsFormatNode.InnerText == "XML")
+            {
+                isTypeJson = false;
+            }
         }
 
     }

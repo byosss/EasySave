@@ -22,7 +22,7 @@ namespace EasySave.Models
         static List<string> extensionToPrioritize = new List<string> { "docx", "xls" };
         static List<string> extensionToCrypt = new List<string> { "pdf", "txt" };
 
-        string XORKey = "Saucisse";
+        static string XORKey = "Saucisse";
 
         public void createJob(string JobName, string PathSource, string PathTarget, string Type)
         {
@@ -159,7 +159,10 @@ namespace EasySave.Models
             });
 
 
-            //Directory.Delete(job.pathTarget);
+            if (Directory.Exists(job.pathTarget))
+            {
+                Directory.Delete(job.pathTarget, true);
+            }
 
 
             DirectoryInfo sourceDir = new DirectoryInfo(job.pathSource);
@@ -174,26 +177,56 @@ namespace EasySave.Models
                 targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
             }
 
-            // Copier les fichiers prioritaires et les autres fichiers
+            // Copier les fichiers prioritaires
             foreach (string ext in extensionToPrioritize)
             {
-                foreach (FileInfo file in sourceDir.GetFiles("*." + ext, SearchOption.AllDirectories))
+                foreach (FileInfo sourceFile in sourceDir.GetFiles("*." + ext, SearchOption.AllDirectories))
                 {
-                    while (threadIsPaused[job.name])
+                    while (threadIsPaused[job.name])  // bouton pause actif
                     {
                         Thread.Sleep(250);
                     }
 
-                    string targetFile = Path.Combine(targetDir.FullName, file.FullName.Substring(sourceDir.FullName.Length + 1));
-                    Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
-                    File.Copy(file.FullName, targetFile, true);
+                    Stopwatch stopWatch = new Stopwatch();  // on démarre un chronomètre
+                    stopWatch.Start();
 
-                    lock (StateFile.stateFileLock)
+
+                    string targetFilePath = Path.Combine(targetDir.FullName, sourceFile.FullName.Substring(sourceDir.FullName.Length + 1));  // on copie le file
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
+                    File.Copy(sourceFile.FullName, targetFilePath, true);   
+
+
+                    stopWatch.Stop();  // on arrête le chronomètre
+
+
+                    lock (StateFile.stateFileLock)   // on update le fichier état
                     {
-                        state state = new state(job.name, file.FullName, targetFile, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir) * 100f);
+                        float progression = (1f - (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir)) * 100f;
+                        state state = new state(job.name, sourceFile.FullName, targetFilePath, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, progression);
                         StateFile.updateStateFile(state);
                     }
-                    
+
+
+                    Stopwatch stopWatch2 = new Stopwatch();  // on démarre un chronomètre
+                    stopWatch2.Start();
+
+
+                    if (extensionToCrypt.Contains(sourceFile.Extension.Substring(1)))  // on crypte le file avec CryptoSoft
+                    {
+                        MessageBox.Show("cryptage or what");
+
+                        Process pr = new Process();
+                        pr.StartInfo.FileName = @"..\..\..\..\Files\CryptoSoft\CryptoSoft.exe";
+                        pr.StartInfo.Arguments = targetFilePath + " " + XORKey;
+                        pr.Start();
+                    }
+
+                    stopWatch2.Stop();
+
+
+                    // on ajoute les infos dans les logs
+                    log log = new log(job.name, sourceFile.FullName, targetFilePath, sourceFile.Length.ToString(), stopWatch.Elapsed.TotalSeconds.ToString(), stopWatch2.Elapsed.TotalSeconds.ToString());
+                    Logs.addLogs(log);
 
 
                     Thread.Sleep(50);
@@ -204,33 +237,63 @@ namespace EasySave.Models
                     });
                 }
             }
-            
-            foreach (FileInfo file in sourceDir.GetFiles("*", SearchOption.AllDirectories))
+
+
+            // Copier les fichiers non prioritaires
+            foreach (FileInfo sourceFile in sourceDir.GetFiles("*", SearchOption.AllDirectories))
             {
-                if (!extensionToPrioritize.Contains(file.Extension.TrimStart('.')))
+                if (!extensionToPrioritize.Contains(sourceFile.Extension.TrimStart('.')))
                 {
-                    while (threadIsPaused[job.name])
+                    while (threadIsPaused[job.name])  // bouton pause actif
                     {
                         Thread.Sleep(250);
                     }
 
-                    string targetFile = Path.Combine(targetDir.FullName, file.FullName.Substring(sourceDir.FullName.Length + 1));
-                    Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
-                    File.Copy(file.FullName, targetFile, true);
+                    Stopwatch stopWatch = new Stopwatch();  // on démarre un chronomètre
+                    stopWatch.Start();
 
 
-                    lock (StateFile.stateFileLock)
+                    string targetFilePath = Path.Combine(targetDir.FullName, sourceFile.FullName.Substring(sourceDir.FullName.Length + 1));  // on copie le file
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
+                    File.Copy(sourceFile.FullName, targetFilePath, true);
+
+
+                    stopWatch.Stop();  // on arrête le chronomètre
+
+
+                    lock (StateFile.stateFileLock)   // on update le fichier état
                     {
-                        state state = new state(job.name, file.FullName, targetFile, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir) * 100f);
+                        float progression = (1f - (((float)totalFilesInDir - (float)count) / (float)totalFilesInDir)) * 100f;
+                        state state = new state(job.name, sourceFile.FullName, targetFilePath, "ACTIVE", totalFilesInDir, totalFilesInDir, totalFilesInDir - count, progression);
                         StateFile.updateStateFile(state);
                     }
+
+
+                    Stopwatch stopWatch2 = new Stopwatch();  // on démarre un chronomètre
+                    stopWatch2.Start();
+
+
+                    if (extensionToCrypt.Contains(sourceFile.Extension.Substring(1)))  // on crypte le file avec CryptoSoft
+                    {
+                        Process pr = new Process();
+                        pr.StartInfo.FileName = @"..\..\..\..\Files\CryptoSoft\CryptoSoft.exe";
+                        pr.StartInfo.Arguments = targetFilePath + " " + XORKey;
+                        pr.Start();
+                    }
+
+                    stopWatch2.Stop();
+
+
+                    // on ajoute les infos dans les logs
+                    log log = new log(job.name, sourceFile.FullName, targetFilePath, sourceFile.Length.ToString(), stopWatch.Elapsed.TotalSeconds.ToString(), stopWatch2.Elapsed.TotalSeconds.ToString());
+                    Logs.addLogs(log);
 
 
                     Thread.Sleep(50);
                     count++;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        label2.Content = count.ToString() + "/" + countFilesInDir(sourceDir.FullName).ToString() + " files";
+                        label2.Content = count.ToString() + "/" + totalFilesInDir.ToString() + " files";
                     });
                 }
             }
