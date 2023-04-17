@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Drawing;
 using System.Xml.Linq;
-
+using System.Reflection;
 
 namespace EasySave.Models
 {
@@ -86,6 +86,9 @@ namespace EasySave.Models
 
         public void executeJob(job job, StackPanel stackPanel)
         {
+
+            
+            // MessageBox.Show(Path.GetFullPath(@"..\..\..\Files\CryptoSoft\CryptoSoft.exe"));
 
             if (!Directory.Exists(job.pathSource))
             {
@@ -190,11 +193,9 @@ namespace EasySave.Models
                     Stopwatch stopWatch = new Stopwatch();  // on démarre un chronomètre
                     stopWatch.Start();
 
-
                     string targetFilePath = Path.Combine(targetDir.FullName, sourceFile.FullName.Substring(sourceDir.FullName.Length + 1));  // on copie le file
                     Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath));
                     File.Copy(sourceFile.FullName, targetFilePath, true);   
-
 
                     stopWatch.Stop();  // on arrête le chronomètre
 
@@ -210,14 +211,14 @@ namespace EasySave.Models
                     Stopwatch stopWatch2 = new Stopwatch();  // on démarre un chronomètre
                     stopWatch2.Start();
 
-
                     if (extensionToCrypt.Contains(sourceFile.Extension.Substring(1)))  // on crypte le file avec CryptoSoft
                     {
-                        MessageBox.Show("cryptage or what");
-
                         Process pr = new Process();
-                        pr.StartInfo.FileName = @"..\..\..\..\Files\CryptoSoft\CryptoSoft.exe";
+                        pr.StartInfo.FileName = Path.GetFullPath(@"..\..\..\Files\CryptoSoft\CryptoSoft.exe");
                         pr.StartInfo.Arguments = targetFilePath + " " + XORKey;
+                        pr.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        pr.StartInfo.CreateNoWindow = true;
+                        pr.StartInfo.UseShellExecute = false;
                         pr.Start();
                     }
 
@@ -272,12 +273,14 @@ namespace EasySave.Models
                     Stopwatch stopWatch2 = new Stopwatch();  // on démarre un chronomètre
                     stopWatch2.Start();
 
-
                     if (extensionToCrypt.Contains(sourceFile.Extension.Substring(1)))  // on crypte le file avec CryptoSoft
                     {
                         Process pr = new Process();
-                        pr.StartInfo.FileName = @"..\..\..\..\Files\CryptoSoft\CryptoSoft.exe";
+                        pr.StartInfo.FileName = Path.GetFullPath(@"..\..\..\Files\CryptoSoft\CryptoSoft.exe");
                         pr.StartInfo.Arguments = targetFilePath + " " + XORKey;
+                        pr.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        pr.StartInfo.CreateNoWindow = true;
+                        pr.StartInfo.UseShellExecute = false;
                         pr.Start();
                     }
 
