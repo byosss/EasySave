@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logs>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\rapport_de_stage_KISS_Nathanv4.docx</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\rapport_de_stage_KISS_Nathanv4.docx</target>
+    <size>3503949</size>
+    <transfertTime>0,0063052</transfertTime>
+    <cryptTime>3,97E-05</cryptTime>
+    <time>18/04/2023 00:24:53</time>
+  </log>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Tour_entreprise.docx</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\Tour_entreprise.docx</target>
+    <size>12232</size>
+    <transfertTime>0,0032812</transfertTime>
+    <cryptTime>9,8E-06</cryptTime>
+    <time>18/04/2023 00:25:02</time>
+  </log>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\~$pport_de_stage_KISS_Nathanv4.docx</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\~$pport_de_stage_KISS_Nathanv4.docx</target>
+    <size>162</size>
+    <transfertTime>0,0027484</transfertTime>
+    <cryptTime>3,3E-06</cryptTime>
+    <time>18/04/2023 00:25:02</time>
+  </log>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\KISS_Nathan_Rapport.pdf</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\KISS_Nathan_Rapport.pdf</target>
+    <size>2644144</size>
+    <transfertTime>0,0052948</transfertTime>
+    <cryptTime>0,0119157</cryptTime>
+    <time>18/04/2023 00:25:02</time>
+  </log>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\MWRLifePowerPoint-FR.ppsx</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\MWRLifePowerPoint-FR.ppsx</target>
+    <size>638205570</size>
+    <transfertTime>1,0515389</transfertTime>
+    <cryptTime>1,1E-05</cryptTime>
+    <time>18/04/2023 00:25:03</time>
+  </log>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Test.txt</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\Test.txt</target>
+    <size>62</size>
+    <transfertTime>0,0010998</transfertTime>
+    <cryptTime>0,0086266</cryptTime>
+    <time>18/04/2023 00:25:03</time>
+  </log>
+  <log>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\test\Test.txt</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination\test\Test.txt</target>
+    <size>62</size>
+    <transfertTime>0,0013698</transfertTime>
+    <cryptTime>0,0082045</cryptTime>
+    <time>18/04/2023 00:25:03</time>
+  </log>
+</logs>

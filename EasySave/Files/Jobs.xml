@@ -1,15 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <jobs>
   <job>
-    <name>test</name>
-    <source>C:\Users\Karim\Desktop\ha</source>
-    <target>C:\Users\Karim\Desktop\trg</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>wow</name>
-    <source>C:\Users\Karim\Documents\Unreal Projects</source>
-    <target>C:\Users\Karim\Desktop\ho</target>
+    <name>Test</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination</target>
     <type>Full</type>
   </job>
 </jobs>
