@@ -1,13 +1,27 @@
-﻿using EasySave.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using EasySave.Models;
+
 
 namespace EasySave.ViewModels
 {
     internal class MainWindowViewModel
     {
+        Jobs _jobs;
+        Logs _logs;
+        StateFile _stateFile;
+
+        public MainWindowViewModel()
+        {
+            _jobs = new Jobs();
+            _logs = new Logs();
+            _stateFile = new StateFile();
+        }
+
+
         private string _jobName = string.Empty;
         public string JobName
         {
@@ -62,12 +76,75 @@ namespace EasySave.ViewModels
 
         public void createBackup()
         {
-            Jobs.createJob(this.JobName, this.PathSource, this.PathTarget, this.Type);
+            _jobs.createJob(this.JobName, this.PathSource, this.PathTarget, this.Type);
         }
 
-        public List<Jobs.job> loadJobs()
+        public void deleteBackup()
         {
-            return Jobs.getJobsFromXml();
+            List<job> jobs = _jobs.getJobsFromXml();
+
+            for (int i = 0; i < jobs.Count; i++)
+            {
+                if (jobs[i].name == this.JobName)
+                {
+                    _jobs.deleteJob(jobs[i]);
+                    return;
+                }
+            }
+            MessageBox.Show("job not found");
         }
+
+        public void executeBackup(StackPanel stackPanel)
+        {
+            List<job> jobs = _jobs.getJobsFromXml();
+
+            for (int i = 0; i < jobs.Count; i++)
+            {
+                if (jobs[i].name == this.JobName)
+                {
+                    // ici fait le check dans le dictionnaire
+                    if (_jobs.isThreadExecuted(this.JobName))
+                    {
+                        MessageBox.Show("job already executed");
+                        return;
+                    }
+
+                    _jobs.executeJob(jobs[i], stackPanel);
+
+                    return;
+                }
+            }
+
+            MessageBox.Show("job not found");
+            return;
+        }
+
+
+        public List<MainWindowViewModel> loadJobs()
+        {
+            List<MainWindowViewModel> list = new List<MainWindowViewModel>();
+
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+
+            List<job> jobs = _jobs.getJobsFromXml();
+
+
+            for (int i = 0; i < jobs.Count; i++)
+            {
+                list.Add(new MainWindowViewModel()
+                {
+                    JobName = jobs[i].name,
+                    PathSource = jobs[i].pathSource,
+                    PathTarget = jobs[i].pathTarget,
+                    Type = jobs[i].type
+                });
+            }
+
+
+            return list;
+        }
+
+
     }
+
 }

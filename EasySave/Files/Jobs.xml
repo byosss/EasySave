@@ -2,14 +2,14 @@
 <jobs>
   <job>
     <name>test</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS\trg</target>
+    <source>C:\Users\Karim\Desktop\ha</source>
+    <target>C:\Users\Karim\Desktop\trg</target>
     <type>Full</type>
   </job>
   <job>
-    <name>test2</name>
-    <source>C:\Users\Utilisateur\Desktop\test-PS\src</source>
-    <target>C:\Users\Utilisateur\Desktop\test-PS\trg</target>
+    <name>wow</name>
+    <source>C:\Users\Karim\Documents\Unreal Projects</source>
+    <target>C:\Users\Karim\Desktop\ho</target>
     <type>Full</type>
   </job>
 </jobs>

@@ -1,30 +1,26 @@
-﻿using EasySave.Models;
-using EasySave.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace EasySave
+using EasySave.ViewModels;
+
+
+namespace EasySave.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
+        MainWindowViewModel viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            viewModel = new MainWindowViewModel();
+
             updateGrid();
         }
 
@@ -43,29 +39,43 @@ namespace EasySave
             updateGrid();
         }
 
+        void btnDeleteJob(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel viewModel = new MainWindowViewModel()
+            {
+                JobName = textBoxJobDelete.Text,
+            };
+
+            viewModel.deleteBackup();
+
+            updateGrid();
+        }
+
+        void btnExecuteJob(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel viewModel = new MainWindowViewModel()
+            {
+                JobName = textBoxJobExecute.Text
+            };
+
+            viewModel.executeBackup(stackPanel);
+        }
+
+
         void updateGrid()
         {
             List<MainWindowViewModel> list = new List<MainWindowViewModel>();
 
             MainWindowViewModel viewModel = new MainWindowViewModel();
 
-            List<Jobs.job> jobs = viewModel.loadJobs();
+            list = viewModel.loadJobs();
 
-
-            for (int i = 0; i < jobs.Count; i++)
-            {
-                list.Add(new MainWindowViewModel()
-                {
-                    JobName = jobs[i].name,
-                    PathSource = jobs[i].pathSource,
-                    PathTarget = jobs[i].pathTarget,
-                    Type = jobs[i].type
-                });
-            }
-
-            dgLstFile.ItemsSource = list;
+            dgLstFile1.ItemsSource = list;
+            dgLstFile2.ItemsSource = list;
+            dgLstFile3.ItemsSource = list;
 
         }
+
 
         private void BrowseSource_Click(object sender, RoutedEventArgs e)
         {
