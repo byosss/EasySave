@@ -12,6 +12,8 @@ namespace EasySave.ViewModels
 {
     internal class MainWindowViewModel
     {
+        public static string language = "en";
+        public static ResourceDictionary dictionary = new ResourceDictionary();
         Jobs _jobs;
         Logs _logs;
         StateFile _stateFile;
@@ -86,6 +88,26 @@ namespace EasySave.ViewModels
         public void VMtoModelJobsRemove(string text)
         {
             Jobs._ProcessesList.Remove(text);
+        }
+
+        public void VMtoModelFilesToEncryptAdd(string text)
+        {
+            Jobs.extensionToCrypt.Add(text);
+        }
+
+        public void VMtoModelFilesToEncryptRemove(string text)
+        {
+            Jobs.extensionToCrypt.Remove(text);
+        }
+
+        public void VMtoModelPriorityFilesAdd(string text)
+        {
+            Jobs.extensionToPrioritize.Add(text);
+        }
+
+        public void VMtoModelPriorityFilesRemove(string text)
+        {
+            Jobs.extensionToPrioritize.Remove(text);
         }
 
         public void Timer_Tick(object sender, EventArgs e)

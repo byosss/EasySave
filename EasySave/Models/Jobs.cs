@@ -20,8 +20,8 @@ namespace EasySave.Models
         public static Dictionary<string, Thread> executedThread = new Dictionary<string, Thread>();
         public static Dictionary<string, bool> threadIsPaused = new Dictionary<string, bool>();
 
-        static List<string> extensionToPrioritize = new List<string> { "docx", "xls" };
-        static List<string> extensionToCrypt = new List<string> { "pdf", "txt" };
+        public static List<string> extensionToPrioritize = new List<string>();// { "docx", "xls" };
+        public static List<string> extensionToCrypt = new List<string>();// { "pdf", "txt" };
         public static List<string> _ProcessesList = new List<string>();
         
         static List<string> ExecutedJobsList = new List<string>();
@@ -115,7 +115,7 @@ namespace EasySave.Models
                 thread.Name = job.name;
                 ThreadsList.Add(thread);
             }
-            else if (job.type == "Diff")
+            else if (job.type == "Differential")
             {
                 thread = new Thread(() => executeDiffJob(job, stackPanel));
                 thread.Name = job.name;
@@ -373,7 +373,10 @@ namespace EasySave.Models
             });
 
 
-            Directory.Delete(job.pathTarget);
+            if (Directory.Exists(job.pathTarget))
+            {
+                Directory.Delete(job.pathTarget, true);
+            }
 
 
             DirectoryInfo sourceDir = new DirectoryInfo(job.pathSource);
@@ -387,6 +390,8 @@ namespace EasySave.Models
             {
                 targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
             }
+
+            PauseJob(job.name);
 
             // Copier les fichiers prioritaires et les autres fichiers
             foreach (string ext in extensionToPrioritize)
@@ -441,9 +446,6 @@ namespace EasySave.Models
                 }
             }
 
-
-
-
             Application.Current.Dispatcher.Invoke(() =>
             {
                 stackPanel.Children.Remove(border);
@@ -451,6 +453,7 @@ namespace EasySave.Models
 
             executedThread.Remove(job.name);
             threadIsPaused.Remove(job.name);
+            ThreadsList.RemoveAll(x => x.Name == job.name);
         }
 
 

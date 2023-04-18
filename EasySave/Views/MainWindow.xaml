@@ -6,39 +6,40 @@
         xmlns:local="clr-namespace:EasySave"
         xmlns:vm="clr-namespace:EasySave.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Easy Save - Rattrapage" Height="450" Width="800" Icon="C:\Users\nathk\Pictures\heuss.jpg">
+
 
     <TabControl>
         <TabItem Header="Create Jobs">
             <Grid Background="#322B33">
-                <Label Content="Jobs creation" HorizontalAlignment="Center" Margin="0,10,0,294" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <Label Content="{DynamicResource createJob}" HorizontalAlignment="Center" Margin="0,10,0,294" FontSize="18" FontWeight="Bold" Foreground="White"/>
 
 
                 <StackPanel Margin="80,40,420,158">
-                    <Label Content="Job name" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
+                    <Label Content="{DynamicResource jobName}" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
                     <TextBox x:Name="textBoxJobName" Margin="10,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" Width="250"/>
 
-                    <Label Content="Source folder" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
+                    <Label Content="{DynamicResource pathSource}" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
                     <DockPanel Margin="10,0,0,5" VerticalAlignment="Center">
                         <TextBox x:Name="textBoxJobSource" IsReadOnly="True" DockPanel.Dock="Left" Width="200" Margin="0,0,3,0"/>
-                        <Button Content="Parcourir" Click="BrowseSource_Click" DockPanel.Dock="Right"/>
+                        <Button Content="{DynamicResource browse}" Click="BrowseSource_Click" DockPanel.Dock="Right"/>
                     </DockPanel>
 
                 </StackPanel>
 
-                <Button Content="Create" Click="btnCreateJob" Margin="310,157,305,189"/>
+                <Button Content="{DynamicResource create}" Click="btnCreateJob" Margin="310,157,305,189"/>
 
                 <StackPanel Margin="420,40,80,218">
                     <Label Content="Type" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
                     <ComboBox x:Name="textBoxJobType" Margin="10, 0"  VerticalAlignment="Center">
-                        <ComboBoxItem IsSelected="True" Content="Full"/>
-                        <ComboBoxItem Content="Diff"/>
+                        <ComboBoxItem IsSelected="True" Content="{DynamicResource full}"/>
+                        <ComboBoxItem Content="{DynamicResource diff}"/>
                     </ComboBox>
 
-                    <Label Content="Target folder" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
+                    <Label Content="{DynamicResource pathTarget}" HorizontalAlignment="Left" FontSize="14" Margin="10,0" Height="30" Foreground="#FFE7CFCF"></Label>
                     <DockPanel Margin="10,0,0,5" VerticalAlignment="Center">
                         <TextBox x:Name="textBoxJobTarget" IsReadOnly="True" DockPanel.Dock="Left" Width="200" Margin="0,0,3,0"/>
-                        <Button Content="Parcourir" Click="BrowseTarget_Click" DockPanel.Dock="Right"/>
+                        <Button Content="{DynamicResource browse}" Click="BrowseTarget_Click" DockPanel.Dock="Right"/>
                     </DockPanel>
 
                 </StackPanel>
@@ -59,7 +60,7 @@
 
         <TabItem Header="Execute Jobs">
             <Grid Background="#FF322B33">
-                <Label Content="Execute Jobs" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <Label Content="{DynamicResource executeJob}" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
 
                 <DataGrid Name="dgLstFile2" AutoGenerateColumns="False" Grid.Row="0" Margin="0,47,65,198" HorizontalAlignment="Right" Width="400">
                     <DataGrid.Columns>
@@ -71,11 +72,11 @@
                 </DataGrid>
 
                 <DockPanel VerticalAlignment="Top" Margin="0,110,500,0" Width="200" Height="25">
-                    <Label Content="Name :"  DockPanel.Dock="Left" Foreground="White"/>
+                    <Label Content="{DynamicResource name}"  DockPanel.Dock="Left" Foreground="White"/>
                     <TextBox x:Name="textBoxJobExecute" DockPanel.Dock="Right"/>
                 </DockPanel>
 
-                <Button Content="Execute" Click="btnExecuteJob" VerticalAlignment="Top" Width="50" Height="30" Margin="50,150,500,0"/>
+                <Button Content="{DynamicResource execute}" Click="btnExecuteJob" VerticalAlignment="Top" Width="50" Height="30" Margin="50,150,500,0"/>
 
 
                 <Border BorderBrush="Black" BorderThickness="1" Width="400" Height="150" Margin="270,210,0,0">
@@ -94,14 +95,14 @@
 
         <TabItem Header="Delete Jobs">
             <Grid Background="#FF322B33">
-                <Label Content="Delete Jobs" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <Label Content="{DynamicResource deleteJob}" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
 
                 <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0" Width="200" Height="25">
-                    <Label Content="Name :"  DockPanel.Dock="Left" Foreground="White"/>
+                    <Label Content="{DynamicResource name}"  DockPanel.Dock="Left" Foreground="White"/>
                     <TextBox x:Name="textBoxJobDelete" DockPanel.Dock="Right"/>
                 </DockPanel>
 
-                <Button Content="Delete" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnDeleteJob" Width="50" Height="30" Margin="50,140,0,10"/>
+                <Button Content="{DynamicResource delete}" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnDeleteJob" Width="91" Height="30" Margin="0,140,0,0"/>
 
 
                 <DataGrid Name="dgLstFile3" AutoGenerateColumns="False" Grid.Row="0" Margin="0,203,0,50" HorizontalAlignment="Center" Width="736">
@@ -127,33 +128,38 @@
                     <ComboBox ItemsSource="{Binding Options}" SelectedValue="{Binding SelectedValue}" DisplayMemberPath="Name" Width="50" Height="20" Margin="0,0,500,0"/>
                 </DockPanel>
 
+                <Label Content="{DynamicResource chooseLang}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,70,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <ComboBox Name="cmb" SelectionChanged="cmb_changed" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="258,116,0,0" Width="100" Height="20">
+                    <ComboBoxItem Content="{DynamicResource en}" Height="30"/>
+                    <ComboBoxItem Content="{DynamicResource fr}" Height="30"/>
+                </ComboBox>
 
-                <Label Content="Priorité" HorizontalAlignment="Center" Margin="150,70,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <Label Content="{DynamicResource priorityLabel}" HorizontalAlignment="Center" Margin="150,70,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
                 <DockPanel VerticalAlignment="Center" Margin="150,0,0,160" Width="130" Height="25">
                     <Label Content="extension :"  DockPanel.Dock="Left" Foreground="White"/>
                     <TextBox x:Name="textBoxExtensionPrio" DockPanel.Dock="Right"/>
                 </DockPanel>
-                <Button Content="Ajouter / Supprimer" Click="btnDeleteJob" Width="120" Height="20" Margin="150,0,0,100"/>
-                <ListBox d:ItemsSource="{d:SampleData ItemCount=5}" Width="100" Height="150" Margin="150,130,0,0"/>
+                <Button Content="{DynamicResource addDelete}" Click="btnAddDeletePriorityFile" Width="120" Height="20" Margin="150,0,0,100"/>
+                <ListBox Name="ListBoxPriorityFiles" d:ItemsSource="{d:SampleData ItemCount=5}" Width="100" Height="150" Margin="150,130,0,0"/>
 
 
-                <Label Content="Crypt" HorizontalAlignment="Center" Margin="500,70,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <Label Content="{DynamicResource encryptionLabel}" HorizontalAlignment="Center" Margin="500,70,0,0" FontSize="18" FontWeight="Bold" Foreground="White"/>
                 <DockPanel VerticalAlignment="Center" Margin="500,0,0,160" Width="130" Height="25">
                     <Label Content="extension :"  DockPanel.Dock="Left" Foreground="White"/>
                     <TextBox x:Name="textBoxExtensionCrypt" DockPanel.Dock="Right"/>
                 </DockPanel>
-                <Button Content="Ajouter / Supprimer" Click="btnDeleteJob" Width="120" Height="20" Margin="500,0,0,100"/>
-                <ListBox d:ItemsSource="{d:SampleData ItemCount=5}" Width="100" Height="150" Margin="500,130,0,0"/>
+                <Button Content="{DynamicResource addDelete}" Click="btnAddDeleteFileToEncrypt" Width="120" Height="20" Margin="500,0,0,100"/>
+                <ListBox Name="ListBoxFilesToEncrypt" d:ItemsSource="{d:SampleData ItemCount=5}" Width="100" Height="150" Margin="500,130,0,0"/>
 
                 <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,105" Width="242" Height="40">
-                    <Label Content="Process to stop :" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" />
+                    <Label Content="{DynamicResource processLabel}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" />
 
                     <TextBox Name="StopProcessTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="NoWrap" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0,0,0" Width="120"/>
 
                 </DockPanel>
                 <ListBox Name="StopProcessListBox" Grid.Column="0" Margin="188,281,489,38" />
-                <Button Name="InsertStopProcessButton" Grid.Row="1" Grid.Column="1" Content="Add" HorizontalAlignment="Left" Margin="50,23,0,80" Width="120" VerticalAlignment="Bottom" Click="InsertStopProcessButton_Click"/>
-                <Button Name="DeleteStopProcessButton" Grid.Row="1" Grid.Column="1" Content="Delete" HorizontalAlignment="Left" Margin="50,48,0,50" Width="120" VerticalAlignment="Bottom" Click="DeleteStopProcessButton_Click"/>
+                <Button Name="InsertStopProcessButton" Grid.Row="1" Grid.Column="1" Content="{DynamicResource add}" HorizontalAlignment="Left" Margin="50,23,0,80" Width="120" VerticalAlignment="Bottom" Click="InsertStopProcessButton_Click"/>
+                <Button Name="DeleteStopProcessButton" Grid.Row="1" Grid.Column="1" Content="{DynamicResource delete}" HorizontalAlignment="Left" Margin="50,48,0,50" Width="120" VerticalAlignment="Bottom" Click="DeleteStopProcessButton_Click"/>
             </Grid>
         </TabItem>
 

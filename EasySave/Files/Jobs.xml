@@ -30,4 +30,10 @@
     <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job6\Coller</target>
     <type>Full</type>
   </job>
+  <job>
+    <name>Test5</name>
+    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2</source>
+    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination</target>
+    <type>Differential</type>
+  </job>
 </jobs>
