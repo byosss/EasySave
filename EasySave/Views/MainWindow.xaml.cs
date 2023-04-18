@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using System.Windows.Threading;
 using EasySave.ViewModels;
+using System.Collections.ObjectModel;
 
 
 namespace EasySave.Views
@@ -15,14 +17,23 @@ namespace EasySave.Views
     {
         MainWindowViewModel viewModel;
 
+        static List<string> _ProcessesList = new List<string>();
+
         public MainWindow()
         {
             InitializeComponent();
 
             viewModel = new MainWindowViewModel();
 
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Tick += viewModel.Timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 1); // Vérifier toutes les 1 seconde
+            timer.Start();
+
             updateGrid();
         }
+
+        
 
         void btnCreateJob(object sender, RoutedEventArgs e)
         {
@@ -76,6 +87,41 @@ namespace EasySave.Views
 
         }
 
+        
+        private void InsertStopProcessButton_Click(object sender, RoutedEventArgs e)
+        {
+            string text = StopProcessTextBox.Text;
+            if (text != "")
+            {
+                //string filepath_settings = fileHelper.FormatFilePath(fileHelper.filepath_settings);
+
+                //Settings settings = dataHelper.ReadSettingsFromJson(filepath_settings);
+
+                //settings.StopProcesses.Add(text);
+                //dataHelper.WriteSettingsToJson(filepath_settings, settings);
+                //mainWindow.StopProcessTextBox.Text = "";
+                //mainController.UpdateView(mainWindow); // Updating all window
+
+                //viewModel._ProcessesList.Add(text);
+                viewModel.VMtoModelJobsAdd(text);
+                StopProcessListBox.Items.Add(text);
+                StopProcessTextBox.Clear();
+            }
+        }
+
+        private void DeleteStopProcessButton_Click(object sender, RoutedEventArgs e)
+        {
+            string text = StopProcessListBox.SelectedItem.ToString();
+            if (text != "")
+            {
+                viewModel.VMtoModelJobsRemove(text);
+                int selectedIndex = StopProcessListBox.SelectedIndex;
+                if (selectedIndex != -1)
+                {
+                    StopProcessListBox.Items.RemoveAt(selectedIndex);
+                }
+            }
+        }
 
         private void BrowseSource_Click(object sender, RoutedEventArgs e)
         {

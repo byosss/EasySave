@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -74,6 +76,46 @@ namespace EasySave.ViewModels
             }
         }
 
+        public List<string> _ProcessesList = new List<string>();
+
+        public void VMtoModelJobsAdd(string text)
+        {
+            Jobs._ProcessesList.Add(text);
+        }
+
+        public void VMtoModelJobsRemove(string text)
+        {
+            Jobs._ProcessesList.Remove(text);
+        }
+
+        public void Timer_Tick(object sender, EventArgs e)
+        {
+            // Vérifier le contenu de la liste ici
+            // Par exemple, afficher un message si la liste contient plus de 10 éléments
+                    
+            //if ( maliste.Count > 10)
+            //{
+            //    MessageBox.Show("La liste contient plus de 10 éléments !");
+            //}
+            foreach (string lProcess in Jobs._ProcessesList)
+            {
+                
+                    if (Process.GetProcessesByName(lProcess).Length > 0)
+                    {
+                        foreach (Thread lThread in Jobs.ThreadsList)
+                        {
+                            // Arrêter la tâche en cours si le processus est détecté
+                            Jobs.threadIsPaused[lThread.Name] = true;
+                            MessageBox.Show("Un logiciel métier empêche la sauvegarde !");
+                        }
+                    }
+                else if (Process.GetProcessesByName(lProcess).Length == 0)// && Jobs.threadIsPaused[lThread.Name] == false)
+                {
+
+                }
+
+            }
+        }
         public void createBackup()
         {
             _jobs.createJob(this.JobName, this.PathSource, this.PathTarget, this.Type);

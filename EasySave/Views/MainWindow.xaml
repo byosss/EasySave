@@ -145,6 +145,15 @@
                 <Button Content="Ajouter / Supprimer" Click="btnDeleteJob" Width="120" Height="20" Margin="500,0,0,100"/>
                 <ListBox d:ItemsSource="{d:SampleData ItemCount=5}" Width="100" Height="150" Margin="500,130,0,0"/>
 
+                <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,105" Width="242" Height="40">
+                    <Label Content="Process to stop :" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" />
+
+                    <TextBox Name="StopProcessTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="NoWrap" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,0,0,0" Width="120"/>
+
+                </DockPanel>
+                <ListBox Name="StopProcessListBox" Grid.Column="0" Margin="188,281,489,38" />
+                <Button Name="InsertStopProcessButton" Grid.Row="1" Grid.Column="1" Content="Add" HorizontalAlignment="Left" Margin="50,23,0,80" Width="120" VerticalAlignment="Bottom" Click="InsertStopProcessButton_Click"/>
+                <Button Name="DeleteStopProcessButton" Grid.Row="1" Grid.Column="1" Content="Delete" HorizontalAlignment="Left" Margin="50,48,0,50" Width="120" VerticalAlignment="Bottom" Click="DeleteStopProcessButton_Click"/>
             </Grid>
         </TabItem>
 
