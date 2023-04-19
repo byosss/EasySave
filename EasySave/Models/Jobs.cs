@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Drawing;
 using System.Xml.Linq;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace EasySave.Models
 {
@@ -19,8 +20,12 @@ namespace EasySave.Models
         public static Dictionary<string, Thread> executedThread = new Dictionary<string, Thread>();
         public static Dictionary<string, bool> threadIsPaused = new Dictionary<string, bool>();
 
-        static List<string> extensionToPrioritize = new List<string> { "docx", "xls" };
-        static List<string> extensionToCrypt = new List<string> { "pdf", "txt" };
+        public static List<string> extensionToPrioritize = new List<string>();// { "docx", "xls" };
+        public static List<string> extensionToCrypt = new List<string>();// { "pdf", "txt" };
+        public static List<string> _ProcessesList = new List<string>();
+        
+        static List<string> ExecutedJobsList = new List<string>();
+        public static List<Thread> ThreadsList = new List<Thread>();
 
         static string XORKey = "Saucisse";
 
@@ -84,6 +89,7 @@ namespace EasySave.Models
             StateFile.deleteStateFile(job.name);
         }
 
+        
         public void executeJob(job job, StackPanel stackPanel)
         {
 
@@ -106,10 +112,14 @@ namespace EasySave.Models
             if (job.type == "Full")
             {
                 thread = new Thread(() => executeFullJob(job, stackPanel));
+                thread.Name = job.name;
+                ThreadsList.Add(thread);
             }
-            else if (job.type == "Diff")
+            else if (job.type == "Differential")
             {
                 thread = new Thread(() => executeDiffJob(job, stackPanel));
+                thread.Name = job.name;
+                ThreadsList.Add(thread);
             }
 
 
@@ -147,7 +157,8 @@ namespace EasySave.Models
                 label2.VerticalAlignment = VerticalAlignment.Center;
 
                 Button button = new Button();
-                button.Content = "Pause";
+                button.Content = "Run/Pause";
+                button.Name = "PauseButton";
                 button.HorizontalAlignment = HorizontalAlignment.Right;
                 button.Margin = new Thickness(7);
                 button.Click += (sender, e) => executedThreadPause(sender, e, job.name);
@@ -179,6 +190,9 @@ namespace EasySave.Models
             {
                 targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
             }
+
+            PauseJob(job.name);
+
 
             // Copier les fichiers prioritaires
             foreach (string ext in extensionToPrioritize)
@@ -314,6 +328,7 @@ namespace EasySave.Models
 
             executedThread.Remove(job.name);
             threadIsPaused.Remove(job.name);
+            ThreadsList.RemoveAll(x => x.Name == job.name);
 
         }
 
@@ -343,7 +358,7 @@ namespace EasySave.Models
                 label2.VerticalAlignment = VerticalAlignment.Center;
 
                 Button button = new Button();
-                button.Content = "Pause";
+                button.Content = "Run/Pause";
                 button.HorizontalAlignment = HorizontalAlignment.Right;
                 button.Margin = new Thickness(7);
                 button.Click += (sender, e) => executedThreadPause(sender, e, job.name);
@@ -358,7 +373,10 @@ namespace EasySave.Models
             });
 
 
-            Directory.Delete(job.pathTarget);
+            if (Directory.Exists(job.pathTarget))
+            {
+                Directory.Delete(job.pathTarget, true);
+            }
 
 
             DirectoryInfo sourceDir = new DirectoryInfo(job.pathSource);
@@ -372,6 +390,8 @@ namespace EasySave.Models
             {
                 targetDir.CreateSubdirectory(dir.FullName.Substring(sourceDir.FullName.Length + 1));
             }
+
+            PauseJob(job.name);
 
             // Copier les fichiers prioritaires et les autres fichiers
             foreach (string ext in extensionToPrioritize)
@@ -426,9 +446,6 @@ namespace EasySave.Models
                 }
             }
 
-
-
-
             Application.Current.Dispatcher.Invoke(() =>
             {
                 stackPanel.Children.Remove(border);
@@ -436,6 +453,7 @@ namespace EasySave.Models
 
             executedThread.Remove(job.name);
             threadIsPaused.Remove(job.name);
+            ThreadsList.RemoveAll(x => x.Name == job.name);
         }
 
 
@@ -565,6 +583,11 @@ namespace EasySave.Models
 
         static void executedThreadPause(object sender, RoutedEventArgs e, string jobName)
         {
+            PauseJob(jobName);
+        }
+
+        static void PauseJob(string jobName)
+        {
             if (threadIsPaused[jobName])
             {
                 threadIsPaused[jobName] = false;
@@ -573,9 +596,9 @@ namespace EasySave.Models
             {
                 threadIsPaused[jobName] = true;
             }
+
+
         }
-
-
         
 
     }
@@ -585,5 +608,6 @@ namespace EasySave.Models
         internal string pathSource { get; set; }
         internal string pathTarget { get; set; }
         internal string type { get; set; }
+
     }
 }

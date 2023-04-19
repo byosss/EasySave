@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="main">BONJOUR</system:String>
+    <system:String x:Key="createJob">Créer un travail de sauvegarde</system:String>
+    <system:String x:Key="executeJob">Exécuter un travail de sauvegarde</system:String>
+    <system:String x:Key="deleteJob">Supprimer un travail de sauvegarde</system:String>
+    <system:String x:Key="en">Anglais</system:String>
+    <system:String x:Key="fr">Français</system:String>
+    <system:String x:Key="settings">Paramètres</system:String>
+    <system:String x:Key="chooseLang">Langues</system:String>
+    <system:String x:Key="typeLog">Type de log: JSON/XML  (Json default)</system:String>
+    <system:String x:Key="currentTypeLog">Type actuel :</system:String>
+    <system:String x:Key="extensionType">Type d'extension fichier à crypter</system:String>
+    <system:String x:Key="enableAll">Activer tous</system:String>
+    <system:String x:Key="jobName">Nom du travail :</system:String>
+    <system:String x:Key="pathSource">Chemin source :</system:String>
+    <system:String x:Key="pathTarget">Chemin cible :</system:String>
+    <system:String x:Key="jobType">Type d'emploi :</system:String>
+    <system:String x:Key="full">Complet</system:String>
+    <system:String x:Key="diff">Différentiel</system:String>
+    <system:String x:Key="create">Créer</system:String>
+    <system:String x:Key="name">Nom</system:String>
+    <system:String x:Key="source">Source</system:String>
+    <system:String x:Key="target">Cible</system:String>
+    <system:String x:Key="type">Type</system:String>
+    <system:String x:Key="execute">Exécuter</system:String>
+    <system:String x:Key="delete">Supprimer</system:String>
+    <system:String x:Key="priorityLabel">Priorité</system:String>
+    <system:String x:Key="encryptionLabel">Cryptage</system:String>
+    <system:String x:Key="addDelete">Ajouter / Supprimer</system:String>
+    <system:String x:Key="processLabel">Logiciel métier bloquant :</system:String>
+    <system:String x:Key="browse">Parcourir</system:String>
+    <system:String x:Key="add">Ajouter</system:String>
+
+</ResourceDictionary>
