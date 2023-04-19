@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
+using EasySave.ViewModels;
 
 namespace EasySave.Models
 {
@@ -15,7 +16,6 @@ namespace EasySave.Models
 
         internal Logs()
         {
-            
 
             string path = @"..\..\..\Files\Setup.xml";
 
@@ -36,6 +36,15 @@ namespace EasySave.Models
                 isTypeJson = false;
             }
 
+            //if (log.keyFormat == "JSON")
+            //{
+            //    isTypeJson = true;
+            //}
+            //else if (log.keyFormat == "XML")
+            //{
+            //    isTypeJson = false;
+            //}
+
         }
 
 
@@ -44,7 +53,7 @@ namespace EasySave.Models
 
             if (isTypeJson)
             {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\logs", DateTime.Now.ToString("dd-MM-yyyy") + ".json");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\Files", DateTime.Now.ToString("dd-MM-yyyy") + ".json");
 
                 if (!File.Exists(path))
                 {
@@ -69,7 +78,7 @@ namespace EasySave.Models
             }
             else if (!isTypeJson)
             {
-                string path = Path.Combine(/*Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),*/ "C:\\Users\\nathk\\source\\repos\\EasySaveFinalRattrapage\\EasySave\\Files", DateTime.Now.ToString("dd-MM-yyyy") + ".xml");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasySave\\Files", DateTime.Now.ToString("dd-MM-yyyy") + ".xml");
 
                 if (!File.Exists(path))
                 {
@@ -152,6 +161,10 @@ namespace EasySave.Models
             }
         }
 
+    }
+
+    internal class MainWindowViwModel
+    {
     }
 
     internal struct log

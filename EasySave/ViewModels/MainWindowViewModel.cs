@@ -23,8 +23,25 @@ namespace EasySave.ViewModels
             _jobs = new Jobs();
             _logs = new Logs();
             _stateFile = new StateFile();
+            FormatOptions = new List<string> { "JSON", "XML" };
         }
+        public List<string> FormatOptions { get; set; }
 
+        private static string _keyFormat = "JSON";
+
+        public string keyFormat
+        {
+            get
+            {
+                return _keyFormat;
+            }
+            set
+            {
+                _keyFormat = value;
+                //OnPropertyChanged(_logFormat);
+
+            }
+        }
 
         private string _jobName = string.Empty;
         public string JobName

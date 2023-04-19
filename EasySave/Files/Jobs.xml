@@ -2,38 +2,32 @@
 <jobs>
   <job>
     <name>Test</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination</target>
+    <source>C:\Users\sarah\Documents\TestPRojet</source>
+    <target>C:\Users\sarah\Documents\TestTarget</target>
     <type>Full</type>
   </job>
   <job>
-    <name>Test1</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job3\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job3\Coller</target>
+    <name>Bloc1</name>
+    <source>C:\Users\sarah\Documents\TestPRojet</source>
+    <target>C:\Users\sarah\Documents\TestTarget</target>
+    <type>Full</type>
+  </job>
+  <job>
+    <name>Bloc2</name>
+    <source>C:\Users\sarah\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Discord Inc</source>
+    <target>C:\Users\sarah\Documents\TestTarget</target>
+    <type>Full</type>
+  </job>
+  <job>
+    <name>Bloc3</name>
+    <source>C:\Users\sarah\AppData\Local\Discord</source>
+    <target>C:\Users\sarah\Documents\TestTarget</target>
     <type>Full</type>
   </job>
   <job>
     <name>Test2</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job4\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job4\Coller</target>
+    <source>C:\Users\sarah\Documents\TestProjet2</source>
+    <target>C:\Users\sarah\Documents\Target2</target>
     <type>Full</type>
-  </job>
-  <job>
-    <name>Test3</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job5\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job5\Coller</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>Test4</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job6\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job6\Coller</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>Test5</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination</target>
-    <type>Differential</type>
   </job>
 </jobs>

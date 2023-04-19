@@ -23,6 +23,7 @@ namespace EasySave.Views
         {
             InitializeComponent();
 
+            DataContext = new MainWindowViewModel();
             viewModel = new MainWindowViewModel();
 
             MainWindowViewModel.language = "en";
