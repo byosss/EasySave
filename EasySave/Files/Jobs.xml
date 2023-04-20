@@ -1,39 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <jobs>
   <job>
-    <name>Test</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination</target>
+    <name>test</name>
+    <source>C:\Users\Karim\Desktop\ha</source>
+    <target>C:\Users\Karim\Desktop\trg</target>
     <type>Full</type>
-  </job>
-  <job>
-    <name>Test1</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job3\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job3\Coller</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>Test2</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job4\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job4\Coller</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>Test3</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job5\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job5\Coller</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>Test4</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job6\Copier</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Cours\A3 FISE\Rattrapages\Projet_EasySave\Job6\Coller</target>
-    <type>Full</type>
-  </job>
-  <job>
-    <name>Test5</name>
-    <source>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2</source>
-    <target>C:\Users\nathk\Desktop\Travail\CESI\Stages\A2\Destination</target>
-    <type>Differential</type>
   </job>
 </jobs>

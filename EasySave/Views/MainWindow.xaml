@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EasySave"
         xmlns:vm="clr-namespace:EasySave.ViewModels"
         mc:Ignorable="d"
-        Title="Easy Save - Rattrapage" Height="450" Width="800" Icon="C:\Users\nathk\Pictures\heuss.jpg">
+        Title="Easy Save - Rattrapage" Height="450" Width="800">
 
 
     <TabControl>

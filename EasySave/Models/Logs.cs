@@ -69,7 +69,7 @@ namespace EasySave.Models
             }
             else if (!isTypeJson)
             {
-                string path = Path.Combine(/*Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),*/ "C:\\Users\\nathk\\source\\repos\\EasySaveFinalRattrapage\\EasySave\\Files", DateTime.Now.ToString("dd-MM-yyyy") + ".xml");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DateTime.Now.ToString("dd-MM-yyyy") + ".xml");
 
                 if (!File.Exists(path))
                 {
