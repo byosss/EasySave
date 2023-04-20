@@ -89,31 +89,6 @@ namespace EasySave.Models
 
             File.WriteAllText(path, StringToJson);
 
-            /*
-            while (true)
-            {
-                try
-                {
-                    //Ecrit les données dans le fichier log
-                    File.WriteAllText(path, StringToJson);
-                    break;
-                }
-                catch
-                {
-                    // The file is still in use - wait and try again
-                    Thread.Sleep(25);
-                }
-                /*catch (IOException)
-                {
-                }*/
-                /*catch (System.UnauthorizedAccessException ex)
-                {
-                }*/
-
-                /*catch (System.Exception ex)
-                {
-                }
-            }*/
         }
 
         public static void deleteStateFile(string fileStateName)
